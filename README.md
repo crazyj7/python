@@ -1,5 +1,5 @@
-test crazyj7@gmail.com
-"TEST" 
+crazyj7@gmail.com
+
 
 Jupyter Key
 
