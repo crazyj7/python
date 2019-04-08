@@ -3,6 +3,7 @@ from keras.utils import np_utils
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Activation
+import numpy as np
 
 # 1. 데이터셋 생성하기
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -33,9 +34,16 @@ print('## evaluation loss and_metrics ##')
 print(loss_and_metrics)
 
 # 7. 모델 사용하기
-xhat = x_test[0:1]
+xhat = x_test[0:3]
 yhat = model.predict(xhat)
+yt = y_test[0:3]
+
 print('## yhat ##')
 print(yhat)
-
+print('## Y ##')
+print(yt)
+print('## Y result ##')
+print(np.argwhere(yt==1)[:,1])
+print('## YHAT result ##')
+print(np.argmax(yhat, axis=1))
 

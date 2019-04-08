@@ -7,4 +7,5 @@ with open('snow.jpg', 'rb') as file:
     img = img.resize((64,64))
     data = np.asarray(img)
     print(data)
+    print(data.shape)
 
