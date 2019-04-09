@@ -132,32 +132,55 @@ if __name__ == "__main__":
         if True:
             print('make tokens nltk')
             t = Okt()
-            doc_ko = open(filename2, 'r').read()
-            tokens = t.morphs(doc_ko)
-            print(tokens)
+            doc_ko = open(filename3, 'r', encoding='utf-8').read()
 
+            # tokens = t.morphs(doc_ko)
+            # tokens = t.nouns(doc_ko)
+            # print(tokens)
+
+            tokens = []
+            malist = t.pos(doc_ko)
+            for word, pumsa in malist:
+                # pumsa list ; Adjective, Adverb, Alpha, Conjunction, Determiner
+                # Eomi, Exclamation, Foreign, Hashtag, Josa, KoreanParticle, Noun, Number
+                # PreEomi, Punctuation, ScreenName, Suffix, Unknown, Verb.
+                if not pumsa in ['Josa', 'Eomi', 'Punctuation', 'Unknown', 'Conjunction', 'Suffix']:
+                    tokens.append(word)
+
+            # NLTK TEXT 객체 생성. 개수, 유사성, 검색.
             ko = nltk.Text(tokens, name='none')
             print(len(ko.tokens))
             print(len(set(ko.tokens)))
             ko.vocab()
 
+            # NLTK FreqDist 객체 생성. 개수, 빈도측정. 상위 발생 단어.
+            fd = nltk.FreqDist(tokens)
+
             with open(filename5, 'wb') as fp:
                 pickle.dump(ko, fp)
+                pickle.dump(fd, fp)
         else:
             with open(filename5, 'rb') as fp:
                 ko = pickle.load(fp)
+                fd = pickle.load(fp)
 
         t2=time.time()
         print('time=', t2-t1)
 
-        print('count word=조선', ko.count('조선'))
-        print('similar word=조선', ko.similar('조선'))
-        print('line word=조선', ko.concordance('조선'))
-        print('line word=조선', ko.concordance('조선'))
+        # Text object methods.
+        # print('count word=조선', ko.count('조선'))
+        # print('similar word=고려')
+        # ko.similar('고려')    # auto print
+        # print('line word=조선')
+        # ko.concordance('조선')    # auto print
+        # ko.plot(50)
 
-        ko.
+        # FreqDist Object methods.
+        # fd = nltk.FreqDist(["조선", "고려", "신라", "조선"])
+        print( fd.N(), fd["조선"], fd.freq("조선"))
+        print( fd.most_common(10) )
 
-        ko.plot(50)
+
 
 
     print('end')
