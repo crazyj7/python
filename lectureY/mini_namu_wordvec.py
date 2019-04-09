@@ -3,8 +3,13 @@ import codecs
 import sys, os
 import time
 
+import nltk
+
 from gensim.models import word2vec
 from konlpy.tag import Okt
+
+import pickle
+
 
 '''
 JSON 나무위키 파싱
@@ -83,6 +88,7 @@ if __name__ == "__main__":
     filename2='mini_namu.txt'
     filename3='mini_namu.wakati'
     filename4='mini_namu.model'
+    filename5='mini_namu.pkl'
 
     # load_json(filename)
     # 나무위키 JSON DB에서 제목과 컨텐트를 스트링으로 기록한 파일 생성. (txt)
@@ -99,8 +105,7 @@ if __name__ == "__main__":
         print('End Wakati', 'time=',t2-t1)
 
 
-
-    if True:
+    if False:
         print('Model test')
         t1=time.time()
         model = word2vec.Word2Vec.load(filename4)
@@ -118,6 +123,42 @@ if __name__ == "__main__":
         print(model.doesnt_match("총 무기 칼 게임 하늘".split() ) )
 
         print('time=',t2-t1)
+
+
+    # NLTK test
+    if True:
+
+        t1 = time.time()
+        if True:
+            print('make tokens nltk')
+            t = Okt()
+            doc_ko = open(filename2, 'r').read()
+            tokens = t.morphs(doc_ko)
+            print(tokens)
+
+            ko = nltk.Text(tokens, name='none')
+            print(len(ko.tokens))
+            print(len(set(ko.tokens)))
+            ko.vocab()
+
+            with open(filename5, 'wb') as fp:
+                pickle.dump(ko, fp)
+        else:
+            with open(filename5, 'rb') as fp:
+                ko = pickle.load(fp)
+
+        t2=time.time()
+        print('time=', t2-t1)
+
+        print('count word=조선', ko.count('조선'))
+        print('similar word=조선', ko.similar('조선'))
+        print('line word=조선', ko.concordance('조선'))
+        print('line word=조선', ko.concordance('조선'))
+
+        ko.
+
+        ko.plot(50)
+
 
     print('end')
 
