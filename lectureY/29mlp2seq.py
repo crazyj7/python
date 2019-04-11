@@ -8,6 +8,7 @@ data_file = root_dir + "/data.json"
 data_file_min = root_dir + "/data-mini.json"
 
 # 어구를 자르고 ID로 변환하기 ---(※1)
+# word_dic (단어 사전) 키는 단어가 되고, 뒤는 incremental ID로 부여됨.
 word_dic = { "_MAX": 0 }
 
 def text_to_ids(text):
