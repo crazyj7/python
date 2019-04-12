@@ -2,7 +2,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 
 '''
-네이버  실시간 탑10 뉴스  
+다음 실시간 탑10 뉴스  
 '''
 
 url = "https://m.daum.net"
@@ -25,14 +25,17 @@ browser.save_screenshot("web2.png")
 
 html = browser.page_source
 soup = BeautifulSoup(html, 'html.parser')
-notices = soup.select('div.realtime_layer ol.list_issue #hotissue ')
+# print(soup)
+notices = soup.select('div.realtime_layer div.panel')
 
 for n in notices:
-    print(n)
-    if n.select_one('.num_issue')!=None:
-        print(n.select_one('.num_issue').text)
-        print(n.select_one('.txt_issue').text)
-        print('href=',n.a['href'])
+    # print ('aria-hidden-', n['aria-hidden'])
+    if n['aria-hidden']=='false':
+        lis = n.select('li')
+        for l in lis:
+            print(l.select_one('.num_issue').text)
+            print(l.select_one('.txt_issue').text)
+            print('href=',l.a['href'])
 
 browser.quit()
 

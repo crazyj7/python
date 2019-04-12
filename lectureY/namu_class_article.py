@@ -50,7 +50,7 @@ print('Model test')
 t1 = time.time()
 model = word2vec.Word2Vec.load(filename4)
 t2 = time.time()
-
+print('model load elapsed=', t2-t1)
 top20_dic=make_DF(filename)
 for ks in top20_dic.keys():
     print(ks, top20_dic[ks], end=" ,")
@@ -61,8 +61,11 @@ for ca in category:
     sims = []
     dfs = []
     for ks in top20_dic.keys():
-        v1 = model.similarity(ca, ks)
-        sims.append( v1 )
+        try:
+            v1 = model.similarity(ca, ks)
+            sims.append( v1 )
+        except KeyError:
+            sims.append( 0.0 )
         v2 = top20_dic[ks]
         dfs.append( v2 )
         print(ca, ks, 'similarity=',v1, 'df=',v2)
