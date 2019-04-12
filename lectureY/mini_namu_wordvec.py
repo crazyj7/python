@@ -9,7 +9,7 @@ from gensim.models import word2vec
 from konlpy.tag import Okt
 
 import pickle
-
+from textwrap import wrap
 
 '''
 JSON 나무위키 파싱
@@ -37,7 +37,7 @@ def load_json(filename):
 
 def load_and_write_content(filename, filename2):
     count=0
-    file = codecs.open(filename2, 'w', encoding='utf-8')
+    file = codecs.open(filename2, 'w', encoding='utf-8', errors='ignore')
     with open(filename, 'r') as fd:
         for item in ijson.items(fd, 'item'):
             count+=1
@@ -54,26 +54,52 @@ def load_and_write_content(filename, filename2):
 def make_wakati(f1, f2, f3):
     file = codecs.open(f1, 'r', encoding='utf-8')
     text = file.read()
+    file.close()
 
-    twitter = Okt()
+    # make wakati file
+    twitter = Okt(max_heap_size=1024*8)     # heap size.. 8G
     lines = text.split('\r\n')
-    results = []
+    t1=time.time()
+
+    print('making wakati start')
+    print('lines count=', len(lines))
+    fp = open(f2, "w", encoding="utf-8")
     for line in lines:
-        r = []
-        malist = twitter.pos(line)      # part of speech (POS)
-        # pumsa : Noun, Josa, Verb, Eomi, Punctuation, Number, KoreanParticle, 
-        for word, pumsa in malist:
-            if not pumsa in ['Josa', 'Eomi', 'Punctuation']:
-                r.append(word)
-        results.append((" ".join(r)).strip())
-    output = (" ".join(results)).strip()
+        linelen = len(line)
+        print("line length=", linelen)
 
-    with open(f2, "w", encoding="utf-8") as fp:
-        fp.write(output)
+        # split.
+        # lineparts = map(''.join, zip(*[iter(line)] * 1000*1000*20))    # 20MB / 1line
+        blocksize = 1000*1000*20
+        if linelen % blocksize == 0:
+            blockcnt = int(linelen/blocksize)
+        else:
+            blockcnt = int(linelen / blocksize) + 1
 
+        for li in range(blockcnt):
+            if li==blockcnt-1:
+                linepart = line[li*blocksize:]
+            else:
+                linepart = line[li*blocksize:(li+1)*blocksize]
+            print('progress=', li, '/', blockcnt, len(linepart) )
+            malist = twitter.pos(linepart)      # part of speech (POS)
+            # pumsa : Noun, Josa, Verb, Eomi, Punctuation, Number, KoreanParticle,
+            for word, pumsa in malist:
+                if not pumsa in ['Josa', 'Eomi', 'Punctuation']:
+                    fp.write(word.strip())
+                    fp.write(" ")
+    fp.close()
+    t2=time.time()
+    print('making wakati end time=', t2-t1)
+
+    # make word2vec
+    t1=time.time()
+    print('word2vec start.')
     data = word2vec.LineSentence(f2)
     model = word2vec.Word2Vec(data, size=200, window=10, hs=1, min_count=5, sg=1, workers=3)
     model.save(f3)
+    t2=time.time()
+    print('word2vec end. time=', t2-t1)
 
 
 if __name__ == "__main__":
@@ -83,19 +109,28 @@ if __name__ == "__main__":
     os.chdir(filedir)
     print('filedir=', filedir)
 
-    # filename ='/home/psychic/download/namuwiki_20180326.json'
+    # mini namu
     filename ='mini_namu.json'
     filename2='mini_namu.txt'
     filename3='mini_namu.wakati'
     filename4='mini_namu.model'
     filename5='mini_namu.pkl'
 
+    #real namu
+    filename ='./hub/namu.json'
+    filename2='./hub/namu.txt'
+    filename3='./hub/namu.wakati'
+    filename4='./hub/namu.model'
+    filename5='./hub/namu.pkl'
+
     # load_json(filename)
     # 나무위키 JSON DB에서 제목과 컨텐트를 스트링으로 기록한 파일 생성. (txt)
     if False:
         print('Create WordTxT')
+        t1=time.time()
         load_and_write_content(filename, filename2)
-        print('End WordTxt ')
+        t2=time.time()
+        print('End WordTxt ', 'time=',t2-t1)
 
     if False:
         print('Create Wakati')
@@ -104,8 +139,7 @@ if __name__ == "__main__":
         t2=time.time()
         print('End Wakati', 'time=',t2-t1)
 
-
-    if False:
+    if True:
         print('Model test')
         t1=time.time()
         model = word2vec.Word2Vec.load(filename4)
@@ -126,7 +160,7 @@ if __name__ == "__main__":
 
 
     # NLTK test
-    if True:
+    if False:
 
         t1 = time.time()
         if True:
