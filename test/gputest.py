@@ -5,6 +5,12 @@ from datetime import datetime
 
 shape = (int(10000), int(10000))
 
+#
+# device GPU 1sec : /gpu:0
+# device CPU 7sec : /cpu:0
+#
+
+
 with tf.device("/gpu:0"):
     random_matrix = tf.random_uniform(shape=shape, minval=0, maxval=1)
     dot_operation = tf.matmul(random_matrix, tf.transpose(random_matrix))
