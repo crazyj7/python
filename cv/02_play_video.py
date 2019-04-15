@@ -25,6 +25,6 @@ def playVideo(vfile):
     cv2.destroyAllWindows()
 
 
-    # playVideo(0)    # from webcam
-    playVideo('image/a.avi')
+    playVideo(0)    # from webcam
+    # playVideo('image/a.avi')
 
