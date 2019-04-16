@@ -51,9 +51,9 @@ for f in file_list:
     dataset['lmks'].append(landmarks.flatten())
     dataset['bbs'].append(bb.flatten())
 
+    # Preview image. mark circle.
     # for l in landmarks:
     #   cv2.circle(img, center=tuple(l), radius=1, color=(255, 255, 255), thickness=2)
-
     # cv2.imshow('img', img)
     # if cv2.waitKey(0) == ord('q'):
     #   break

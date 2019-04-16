@@ -10,7 +10,8 @@ def contourtest():
     img_copy = img.copy()
 
     ret, thr = cv2.threshold(img, 100, 255, 0)
-    _, contours, _ = cv2.findContours(thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # _, contours, _ = cv2.findContours(thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)    # old version
+    contours, _ = cv2.findContours(thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     cv2.drawContours(img, contours, -1, (0,0,255), 1)
     cv2.imshow('thresh', thr)
