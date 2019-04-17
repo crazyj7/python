@@ -7,18 +7,27 @@ from keras.models import Model, load_model
 import numpy as np
 import pandas as pd
 from math import atan2, degrees
+import random
+
+
+modelsavefile1 = 'cat_hipster1.model'
+modelsavefile2 = 'cat_hipster2.model'
 
 img_size = 224
-base_path = 'samples'
-file_list = sorted(os.listdir(base_path))
+base_path = './cats/CAT_05'
+
+# file_list = sorted(os.listdir(base_path))
+file_list = os.listdir(base_path)
+random.shuffle(file_list)
+
+print(file_list)
 
 # this is most important thing
-glasses = cv2.imread('images/glasses.png', cv2.IMREAD_UNCHANGED)
+glasses = cv2.imread('./cats/glasses.png', cv2.IMREAD_UNCHANGED)
 
-bbs_model_name = sys.argv[1]
-lmks_model_name = sys.argv[2]
-bbs_model = load_model(bbs_model_name)
-lmks_model = load_model(lmks_model_name)
+bbs_model = load_model(modelsavefile1)
+
+lmk_model = load_model(modelsavefile2)
 
 
 def resize_img(im):
@@ -72,10 +81,16 @@ def angle_between(p1, p2):
 
 # testing
 for f in file_list:
+    if '.jpg.cat' in f:
+        continue
     if '.jpg' not in f:
         continue
+    filename = os.path.join(base_path, f)
+    img = cv2.imread(filename)
+    print('filename=', filename)
+    if img.any()==None:
+        continue
 
-    img = cv2.imread(os.path.join(base_path, f))
     ori_img = img.copy()
     result_img = img.copy()
 
@@ -97,13 +112,20 @@ for f in file_list:
     ]).astype(np.int)
     new_bb = np.clip(new_bb, 0, 99999)
 
-    # predict landmarks
     face_img = ori_img[new_bb[0][1]:new_bb[1][1], new_bb[0][0]:new_bb[1][0]]
     face_img, face_ratio, face_top, face_left = resize_img(face_img)
 
-    face_inputs = (face_img.astype('float32') / 255).reshape((1, img_size, img_size, 3))
+    # debug
+    # cv2.imshow('org img', ori_img)
+    # cv2.imshow('predict face part', face_img)
+    # print('press any key....(q is quit)')
+    # if cv2.waitKey(0)==ord('q'):
+    #     break
 
-    pred_lmks = lmks_model.predict(face_inputs)[0].reshape((-1, 2))
+
+
+    face_inputs = (face_img.astype('float32') / 255).reshape((1, img_size, img_size, 3))
+    pred_lmks = lmk_model.predict(face_inputs)[0].reshape((-1, 2))
 
     # compute landmark of original image
     new_lmks = ((pred_lmks - np.array([face_left, face_top])) / face_ratio).astype(np.int)
@@ -116,7 +138,13 @@ for f in file_list:
         cv2.putText(ori_img, str(i), tuple(l), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         cv2.circle(ori_img, center=tuple(l), radius=1, color=(255, 255, 255), thickness=2)
 
-    # wearing glasses
+    # debug. 원본이미지와 랜드마크
+    # cv2.imshow('predict face part', ori_img)
+    # print('press any key....(q is quit)')
+    # if cv2.waitKey(0)==ord('q'):
+    #     break
+
+    # # wearing glasses
     glasses_center = np.mean([ori_lmks[0], ori_lmks[1]], axis=0)
     glasses_size = np.linalg.norm(ori_lmks[0] - ori_lmks[1]) * 2
 
@@ -133,10 +161,10 @@ for f in file_list:
 
     cv2.imshow('img', ori_img)
     cv2.imshow('result', result_img)
-    filename, ext = os.path.splitext(f)
-    cv2.imwrite('result/%s_lmks%s' % (filename, ext), ori_img)
-    cv2.imwrite('result/%s_result%s' % (filename, ext), result_img)
-
+    # filename, ext = os.path.splitext(f)
+    # cv2.imwrite('result/%s_lmks%s' % (filename, ext), ori_img)
+    # cv2.imwrite('result/%s_result%s' % (filename, ext), result_img)
+    #
     if cv2.waitKey(0) == ord('q'):
         break
-
+    #
