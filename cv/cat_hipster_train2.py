@@ -64,7 +64,7 @@ else:
     model.compile(optimizer=keras.optimizers.Adam(), loss='mse')
 
 # epoch 50
-model.fit(x_train, y_train, epochs=5, batch_size=32, shuffle=True,
+model.fit(x_train, y_train, epochs=50, batch_size=32, shuffle=True,
           validation_data=(x_test, y_test), verbose=1)
 
 model.save(modelsavefile)
