@@ -7,6 +7,12 @@ PYTHON 3.6
 sample face video ; 
 videos.pexels.com/search/face
 
+동영상에 얼굴 영역을 감지하여 다른 이미지를 덮어쓴다.
+
+dlib의 얼굴 감지 모듈 ; dlib.get_frontal_face_detector()
+학습 파일이 필요 ; predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+
+
 '''
 
 

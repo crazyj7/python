@@ -2,6 +2,17 @@ import cv2
 import numpy as np
 
 
+'''
+동영상 첫 프레임을 열고 이미지를 띄운다
+마우스로 추적 영역을 드래그 선택한 후 , 스페이스키로 완료
+동영상이 재생되면서 오브젝트를 추적한다.
+
+
+cv2의 트랙커 사용.
+
+'''
+
+
 video_path = 'c:/users/crazy/downloads/bts3.mkv'
 
 # output_size = (375, 667)  # w, h

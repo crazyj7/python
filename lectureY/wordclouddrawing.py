@@ -88,15 +88,17 @@ else:
     with open('wordcloud.pkl', 'rb') as f:
         tags = pickle.load(f)
 
-print(tags)
+
+print(len(tags))
+print('tags=', tags)
 
 ###########################################################
 
 # get only TOP10
 newtags=[]
-for i in range(50):
-    # if tags[i]['tag'] in ['것', '그', '이', '니', '기', '뒤', '리', '지'] :    # skip
-    #     continue
+for i in range(20):
+    if tags[i]['tag'] in ['것', '그', '이', '니', '기', '뒤', '리', '지'] :    # skip
+        continue
     newtags.append(tags[i])
 
 # font size adjust (or multipler change!)

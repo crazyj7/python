@@ -1,7 +1,7 @@
 
 from gensim.models import word2vec
 import codecs
-from  konlpy.tag import Okt
+from konlpy.tag import Okt
 
 file = codecs.open('toji01.txt', 'r', encoding='utf-8')
 text = file.read()

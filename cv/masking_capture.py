@@ -1,3 +1,13 @@
+'''
+
+마스킹하여 캡쳐하기
+
+첫 프레임을 백그라운드로 사용
+지정된 색 범위를 마스킹 영역으로 사용.
+
+'''
+
+
 import cv2
 import numpy as np
 import time, argparse
