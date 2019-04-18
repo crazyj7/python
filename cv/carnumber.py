@@ -2,18 +2,23 @@
 # coding: utf-8
 
 # In[1]:
+'''
+번호판 인식기 ...
+성능이 좋지 않음...
+OCR ; tesseract가 필요함. 학습 파일도 있어야 함.
+
+opencv로 컨투어를 찾아가면 번호판 후보 검색. 가우시안 필터 적용 등.
+영역을 찾은 후, 수평 보정하고 문자인식을 수행한다.
+
+'''
 
 
 import cv2, sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 import pytesseract
+
 plt.style.use('dark_background')
-
-
-# # Read Input Image
-
-# In[2]:
 
 curdir = os.path.dirname(__file__)
 os.chdir(curdir)

@@ -13,7 +13,7 @@ import time
 import numpy as np
 
 category = ['정치', '경제', '사회', 'IT', '과학', '자동차', '부동산',
-            '생활', '세계', '의학', '인테리어', '예술', '연예']
+            '생활', '세계', '의학', '인테리어', '예술', '연예', '스포츠']
 
 filename='namu_test_article.txt'
 filename4 = './hub/namu.model'
