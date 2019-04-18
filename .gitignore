@@ -2,5 +2,6 @@
 .idea/
 __pycache__/
 *.h5
-
 "mnist/" 
+"cats/"
+

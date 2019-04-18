@@ -18,7 +18,9 @@ plt.style.use('dark_background')
 curdir = os.path.dirname(__file__)
 os.chdir(curdir)
 
-img_ori = cv2.imread('4.jpg')
+carnumfile = '3.jpg'
+
+img_ori = cv2.imread(carnumfile)
 
 height, width, channel = img_ori.shape
 
@@ -352,7 +354,22 @@ for i, plate_img in enumerate(plate_imgs):
     img_result = cv2.copyMakeBorder(img_result, top=10, bottom=10, left=10, right=10, borderType=cv2.BORDER_CONSTANT, value=(0,0,0))
 
     # chars = pytesseract.image_to_string(img_result, lang='kor', config='--psm 7 --oem 0')
-    chars = pytesseract.image_to_string(img_result, lang='kor')
+    # chars = pytesseract.image_to_string(img_result, lang='kor')
+    # chars = pytesseract.image_to_string(img_result, config='-l kor --psm 8 --dpi 300')
+    # img_result inverse
+    # print(img_result.shape)
+    # print(img_result)
+    img_result = cv2.bitwise_not(img_result)        # invert color
+    chars = pytesseract.image_to_string(img_result, config='-l kor --psm 7 --dpi 300')
+    cv2.imwrite(carnumfile+".png", img_result)
+    print(chars)
+
+    # resize
+    img_resize = cv2.resize(img_result, (img_result.shape[1]//2, img_result.shape[0]//2))
+    cv2.imwrite(carnumfile+"2.png", img_resize)
+    chars = pytesseract.image_to_string(img_result, config='-l kor --psm 7 --dpi 300')
+    print('resize=', chars)
+
 
     result_chars = ''
     has_digit = False
@@ -386,7 +403,7 @@ img_out = img_ori.copy()
 
 cv2.rectangle(img_out, pt1=(info['x'], info['y']), pt2=(info['x']+info['w'], info['y']+info['h']), color=(255,0,0), thickness=2)
 
-cv2.imwrite(chars + '.jpg', img_out)
+# cv2.imwrite(chars + '.jpg', img_out)
 
 plt.figure(figsize=(12, 10))
 plt.imshow(img_out)
