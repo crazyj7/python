@@ -20,7 +20,7 @@ y_data = [[0, 0, 1],
           [1, 0, 0]]
 
 
-# Evaluation our model using this test dataset
+# Evaluation our model using this test datasets
 x_test = [[2, 1, 1],
           [3, 1, 2],
           [3, 3, 4]]

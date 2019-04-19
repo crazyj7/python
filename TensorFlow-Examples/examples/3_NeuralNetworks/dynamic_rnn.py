@@ -1,6 +1,6 @@
 '''
 A Dynamic Recurrent Neural Network (LSTM) implementation example using
-TensorFlow library. This example is using a toy dataset to classify linear
+TensorFlow library. This example is using a toy datasets to classify linear
 sequences. The generated sequences have variable length.
 
 Long Short Term Memory paper: http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf
@@ -61,7 +61,7 @@ class ToySequenceData(object):
         self.batch_id = 0
 
     def next(self, batch_size):
-        """ Return a batch of data. When dataset end is reached, start over.
+        """ Return a batch of data. When datasets end is reached, start over.
         """
         if self.batch_id == len(self.data):
             self.batch_id = 0

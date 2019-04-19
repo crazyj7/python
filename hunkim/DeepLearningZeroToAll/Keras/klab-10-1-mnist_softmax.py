@@ -8,7 +8,7 @@ from keras import backend as K
 from keras.datasets import mnist
 
 # Check out https://www.tensorflow.org/get_started/mnist/beginners for
-# more information about the mnist dataset
+# more information about the mnist datasets
 
 # parameters
 learning_rate = 0.001

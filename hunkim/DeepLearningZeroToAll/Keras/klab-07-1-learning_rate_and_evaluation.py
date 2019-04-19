@@ -10,7 +10,7 @@ x_data = [[1, 2, 1], [1, 3, 2], [1, 3, 4], [1, 5, 5],
 y_data = [[0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 1, 0],
           [0, 1, 0], [0, 1, 0], [1, 0, 0], [1, 0, 0]]
 
-# Evaluation our model using this test dataset
+# Evaluation our model using this test datasets
 x_test = [[2, 1, 1], [3, 1, 2], [3, 3, 4]]
 y_test = [[0, 0, 1], [0, 0, 1], [0, 0, 1]]
 

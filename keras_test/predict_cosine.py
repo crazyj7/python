@@ -50,7 +50,7 @@ train = signal_data[0:800]
 val = signal_data[800:1200]
 test = signal_data[1200:]
 
-# create dataset
+# create datasets
 x_train, y_train = create_dataset(train, look_back)
 x_val, y_val = create_dataset(val, look_back)
 x_test, y_test = create_dataset(test, look_back)

@@ -22,7 +22,7 @@ def parse_genres(genres_str):
 
 
 
-meta = pd.read_csv('dataset/movies_metadata.csv')
+meta = pd.read_csv('datasets/movies_metadata.csv')
 meta=meta[['id', 'original_title', 'original_language', 'genres']]
 meta=meta.rename(columns={'id':'movieId'})
 meta=meta[meta['original_language']=='en']
@@ -60,16 +60,16 @@ if meta[meta['original_title']==input_movie]['genres'].count()==0:
     print('not found')
     sys.exit(0)
 
-if os.path.exists('dataset/rating.pkl'):
+if os.path.exists('datasets/rating.pkl'):
     print('load matrix...')
-    with open('dataset/rating.pkl', 'rb') as fp:
+    with open('datasets/rating.pkl', 'rb') as fp:
         matrix = pickle.load(fp)
-    # matrix = joblib.load('dataset/rating.job')
+    # matrix = joblib.load('datasets/rating.job')
     print(matrix.head(20))
     # sys.exit()
 else:
-    ratings = pd.read_csv('dataset/ratings_small.csv')
-    # ratings = pd.read_csv('dataset/ratings.csv')
+    ratings = pd.read_csv('datasets/ratings_small.csv')
+    # ratings = pd.read_csv('datasets/ratings.csv')
     ratings = ratings[['userId', 'movieId', 'rating']]
     ratings.movieId = pd.to_numeric(ratings.movieId, errors='coerce')
     print(ratings.head())
@@ -82,9 +82,9 @@ else:
     print('matrix head')
     print(matrix.head())
     print('save matrix...')
-    with open('dataset/rating.pkl', 'wb') as fp:
+    with open('datasets/rating.pkl', 'wb') as fp:
         pickle.dump(matrix, fp, protocol=4)
-    # joblib.dump(matrix, 'dataset/rating.job')
+    # joblib.dump(matrix, 'datasets/rating.job')
 
 
 GENRE_WEIGHT=0.1

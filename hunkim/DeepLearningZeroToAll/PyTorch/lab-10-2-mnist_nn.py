@@ -12,7 +12,7 @@ learning_rate = 0.001
 training_epochs = 15
 batch_size = 100
 
-# MNIST dataset
+# MNIST datasets
 mnist_train = dsets.MNIST(root='MNIST_data/',
                           train=True,
                           transform=transforms.ToTensor(),
@@ -23,7 +23,7 @@ mnist_test = dsets.MNIST(root='MNIST_data/',
                          transform=transforms.ToTensor(),
                          download=True)
 
-# dataset loader
+# datasets loader
 data_loader = torch.utils.data.DataLoader(dataset=mnist_train,
                                           batch_size=batch_size,
                                           shuffle=True)

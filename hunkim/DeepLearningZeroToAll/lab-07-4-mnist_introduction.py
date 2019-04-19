@@ -6,7 +6,7 @@ tf.set_random_seed(777)  # for reproducibility
 
 from tensorflow.examples.tutorials.mnist import input_data
 # Check out https://www.tensorflow.org/get_started/mnist/beginners for
-# more information about the mnist dataset
+# more information about the mnist datasets
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
 nb_classes = 10

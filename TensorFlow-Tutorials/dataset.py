@@ -281,7 +281,7 @@ def load_cached(cache_path, in_dir):
         The DataSet-object.
     """
 
-    print("Creating dataset from the files in: " + in_dir)
+    print("Creating datasets from the files in: " + in_dir)
 
     # If the object-instance for DataSet(in_dir=data_dir) already
     # exists in the cache-file then reload it, otherwise create

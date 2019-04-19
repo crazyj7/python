@@ -59,7 +59,7 @@ xy = MinMaxScaler(xy)
 x = xy
 y = xy[:, [-1]]  # Close as label
 
-# build a dataset
+# build a datasets
 dataX = []
 dataY = []
 for i in range(0, len(y) - seq_length):

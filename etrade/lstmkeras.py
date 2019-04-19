@@ -11,7 +11,7 @@ import datetime
 import time
 
 
-data = pd.read_csv('dataset/005930.KS.csv')
+data = pd.read_csv('datasets/005930.KS.csv')
 data.head() # 앞에거 5개 출력
 
 high_prices = data['High'].values

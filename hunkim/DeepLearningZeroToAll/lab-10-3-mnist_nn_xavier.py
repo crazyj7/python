@@ -9,7 +9,7 @@ tf.set_random_seed(777)  # reproducibility
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 # Check out https://www.tensorflow.org/get_started/mnist/beginners for
-# more information about the mnist dataset
+# more information about the mnist datasets
 
 # parameters
 learning_rate = 0.001
