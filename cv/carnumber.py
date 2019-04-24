@@ -23,7 +23,8 @@ plt.style.use('dark_background')
 curdir = os.path.dirname(__file__)
 os.chdir(curdir)
 
-carnumfile = '3.jpg'
+carnumfile = '2.jpg'
+# carnumfile = '3.jpg'
 
 img_ori = cv2.imread(carnumfile)
 

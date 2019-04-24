@@ -10,6 +10,8 @@ pip install pyautogui==0.9.38
 pip install pygetwindow==0.0.1
 pip install pyautogui
 
+
+mss ; 빠른 화면 캡쳐
 '''
 
 left_icon_pos = {'left':10, 'top':10, 'width':100, 'height':200}

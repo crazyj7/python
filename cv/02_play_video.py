@@ -8,8 +8,12 @@ def playVideo(vfile):
         print('capture open failed.')
         return
 
-    cap.set(3, 480)
-    cap.set(4, 320)
+    #캠 크기
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 800)
+
+    # cap.set(3, 480)
+    # cap.set(4, 320)
 
     while True:
         ret, frame = cap.read()
@@ -18,13 +22,13 @@ def playVideo(vfile):
             break
         cv2.imshow('video', frame)
         k = cv2.waitKey(1) & 0xFF
-        if k==27:
+        if k == 27:
             print('ESC key pressed for terminating.')
             break
     cap.release()
     cv2.destroyAllWindows()
 
 
-    playVideo(0)    # from webcam
-    # playVideo('image/a.avi')
+playVideo(0)    # from webcam
+# playVideo('image/a.avi')
 

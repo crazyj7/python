@@ -27,7 +27,7 @@ def imginfo():
     cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,200), 1)     # red ; boundingRect area
 
     # extent
-    _,contours,_ = cv2.findContours(imggray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours,_ = cv2.findContours(imggray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnt=contours[0]
 
     cv2.drawContours(img, [cnt], 0, (0,255,0), 2)   # green ; contour area

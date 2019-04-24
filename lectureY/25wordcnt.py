@@ -1,6 +1,6 @@
 import codecs
 from bs4 import BeautifulSoup
-from  konlpy.tag import Okt
+from konlpy.tag import Okt
 
 file = codecs.open('toji01.txt', 'r', encoding='utf-8')
 text = file.read()

@@ -1,5 +1,5 @@
 '''
-CAM 사진찍거나 이미지 파일에서
+CAM 사진찍거나( q 입력) 이미지 파일에서
 인물 추출하여 아웃포커싱하기.
 추출만 10초 걸리는 문제...
 
@@ -121,6 +121,13 @@ scaler = 1.0
 
 if bVideo:
     cap = cv2.VideoCapture(0)
+    print(cap.get(3), cap.get(4))
+    # cap.set(3, 800)  # width
+    # cap.set(4, 600)  # height
+    if not cap.isOpened():
+        print('video open failed.')
+        exit()
+
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -138,13 +145,15 @@ else:
     # file_names = next(os.walk(IMAGE_DIR))[2]
     # image = skimage.io.imread(os.path.join(IMAGE_DIR, random.choice(file_names)))
 
-    filename = 'fashion.jpg'
+    # filename = 'fashion.jpg'
+    filename = 'girlgroup03.jpg'
     image = skimage.io.imread(os.path.join(IMAGE_DIR, filename))  # RGB color mode
 
 
 # Run detection  ..  long time.....
 print('detect object : start....')
 t1 = time.time()
+print('image shape=', image.shape)
 results = model.detect([image], verbose=0)
 t2 = time.time()
 print('detect object : end....', t2-t1)
@@ -155,7 +164,7 @@ visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
 # ## Extract Perrson from Mask
 masks = r['masks'][:,:,r['class_ids']==1]
 bHuman = False
-print('mask', masks.shape)  # 480x640x n
+print('masks shape', masks.shape)  # 480x640x n
 print('classids', r['class_ids'])
 print('scores', r['scores'])
 print('human count=', np.sum(r['class_ids']==1))
@@ -175,8 +184,8 @@ else:
     print('not found')
 # exit()
 
-# blursize = 25
-blursize = 35
+blursize = 25       # 블러링 중간.
+# blursize = 35     # 블러링 강.
 
 if bHuman:
     # ## Blurring
@@ -187,6 +196,24 @@ if bHuman:
     bg_mask = (1-mask_3d_blurred) * blurred_img.astype(np.float32)  ## background mask with blur img
     out = (person_mask+bg_mask).astype(np.uint8)
 
+    # save output file.
+    # plt.figure()
+    # plt.title('org')
+    # plt.imshow(image)
+    # plt.savefig('output_org.png')
+    # plt.close()
+    cvimage = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    cv2.imwrite('output_org.png', cvimage)
+
+    # plt.figure()
+    # plt.title('output')
+    # plt.imshow(out)
+    # plt.savefig('output_outfocus.png')
+    # plt.close()
+    cvout = cv2.cvtColor(out, cv2.COLOR_RGB2BGR)
+    cv2.imwrite('output_outfocus.png', cvout)
+
+    # view mask and output
     plt.figure(figsize=(15,20))
     plt.subplot(2,2,1)
     plt.title('person mask')
