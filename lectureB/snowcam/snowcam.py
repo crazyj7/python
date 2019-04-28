@@ -60,7 +60,7 @@ overlay = cv2.imread('ryan_transparent.png', cv2.IMREAD_UNCHANGED)
 
 detector = dlib.get_frontal_face_detector()
 print('detector=', detector)
-predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+predictor = dlib.shape_predictor('../MODELS/shape_predictor_68_face_landmarks.dat')
 print('predictor=', predictor)
 
 while True:

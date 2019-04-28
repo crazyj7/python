@@ -11,7 +11,6 @@ def playVideo(vfile):
     #캠 크기
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 800)
-
     # cap.set(3, 480)
     # cap.set(4, 320)
 

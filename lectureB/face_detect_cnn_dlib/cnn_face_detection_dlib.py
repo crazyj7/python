@@ -12,12 +12,23 @@ import dlib
 import argparse
 import time
 
+class args:
+    weigths=""
+    image=""
+
 # handle command line arguments
-ap = argparse.ArgumentParser()
-ap.add_argument('-i', '--image', required=True, help='path to image file')
-ap.add_argument('-w', '--weights', default='./mmod_human_face_detector.dat',
-                help='path to weights file')
-args = ap.parse_args()
+if False:   # debug
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-i', '--image', required=True, help='path to image file')
+    ap.add_argument('-w', '--weights', default='../MODELS/mmod_human_face_detector.dat',
+                    help='path to weights file')
+    args = ap.parse_args()
+else:
+    args.weights = "../MODELS/mmod_human_face_detector.dat"
+    args.image = "girlgroup04.jpg"
+
+print("args.weights=", args.weigths)
+print("args.image=", args.image)
 
 # load input image
 image = cv2.imread(args.image)
@@ -40,6 +51,7 @@ faces_hog = hog_face_detector(image, 1)
 end = time.time()
 print("Execution Time (in seconds) :")
 print("HOG : ", format(end - start, '.2f'))
+print('detected count=', len(faces_hog))
 
 # loop over detected faces
 for face in faces_hog:
@@ -59,6 +71,7 @@ faces_cnn = cnn_face_detector(image, 1)
 
 end = time.time()
 print("CNN : ", format(end - start, '.2f'))
+print('detected count=', len(faces_cnn))
 
 # loop over detected faces
 for face in faces_cnn:
@@ -87,4 +100,6 @@ cv2.imwrite("cnn_face_detection.png", image)
 
 # close all windows
 cv2.destroyAllWindows()
+
 print('end')
+exit(0)
