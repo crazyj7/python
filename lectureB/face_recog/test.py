@@ -1,3 +1,7 @@
+'''
+캠에 나온 사람과 지정한 이미지 사진의 거리 측정.
+'''
+
 import dlib, cv2
 import numpy as np
 
@@ -61,7 +65,7 @@ while True:
       shape = sp(img2, d)
       face_descriptor = facerec.compute_face_descriptor(img2, shape)
       dist = np.linalg.norm(img1_encoded - np.array(face_descriptor), axis=0)
-      if dist<0.6:
+      if dist<0.5:
         color = (0,255,0)
         thick = 2
       else:
