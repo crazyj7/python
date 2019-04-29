@@ -17,17 +17,23 @@ data_00 = np.load('./cats/CAT_00_2.npy')
 data_01 = np.load('./cats/CAT_01_2.npy')
 data_02 = np.load('./cats/CAT_02_2.npy')
 data_03 = np.load('./cats/CAT_03_2.npy')
+data_04 = np.load('./cats/CAT_04_2.npy')
+data_05 = np.load('./cats/CAT_05_2.npy')
 
 data_06 = np.load('./cats/CAT_06_2.npy')
 
 x_train = np.concatenate( (data_00.item().get('img2'),
                            data_01.item().get('img2'),
                            data_02.item().get('img2'),
-                           data_03.item().get('img2')), axis=0)
+                           data_03.item().get('img2'),
+                           data_04.item().get('img2'),
+                           data_05.item().get('img2')), axis=0)
 y_train = np.concatenate( (data_00.item().get('lmk2'),
                            data_01.item().get('lmk2'),
                            data_02.item().get('lmk2'),
-                           data_03.item().get('lmk2')), axis=0)
+                           data_03.item().get('lmk2'),
+                           data_04.item().get('lmk2'),
+                           data_05.item().get('lmk2')), axis=0)
 
 x_test = np.array( data_06.item().get('img2'))
 y_test = np.array( data_06.item().get('lmk2'))

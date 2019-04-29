@@ -16,7 +16,7 @@ modelsavefile2 = 'cat_hipster2.model'
 
 scale=0.5   # 출력 화면 크기
 img_size = 224
-base_path = './cats/CAT_05'
+base_path = './cats/test'
 
 # file_list = sorted(os.listdir(base_path))
 file_list = os.listdir(base_path)
