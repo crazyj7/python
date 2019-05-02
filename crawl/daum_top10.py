@@ -20,6 +20,7 @@ browser.implicitly_wait(3)
 browser.get(url)
 browser.save_screenshot("web1.png")
 
+
 browser.find_element_by_xpath('//*[@id="mAside"]/div[1]/div[1]/strong/a').click()
 browser.save_screenshot("web2.png")
 

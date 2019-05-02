@@ -2,12 +2,16 @@
 from telegram.ext import Updater, MessageHandler, Filters
 
 from emoji import emojize
+from daum_top10 import get_daum_top10
 
 apikey = '848818498:AAGvUjAKHoB4Qnl6AynzKeLpJNT6ed2dLkE'
 
 updater = Updater(token=apikey)
 dispatcher = updater.dispatcher
 updater.start_polling()
+
+get_daum_top10()
+
 
 def handler(bot, update):
     text = update.message.text
