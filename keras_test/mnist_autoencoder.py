@@ -118,7 +118,7 @@ with tf.Session() as sess:
     print("Accuracy(before fine-tuning): ")  # Accuracy ~ 0.9282
     print(sess.run(accuracy, feed_dict={X: mnist.test.images, y_: mnist.test.labels}))
 
-    # Step 5: Fine-tuning softmax model
+    # Step 5: Fine-tuning softmax models
     # Training을 시작한다.
     for epoch in range(training_epochs):
         # 모든 배치들을 돌아가면서(Loop) 학습한다.
@@ -129,7 +129,7 @@ with tf.Session() as sess:
         # 일정 epoch step마다 로그를 출력한다.
         if epoch % display_step == 0:
             print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(cost_value))
-    print("Fine-tuning softmax model Optimization Finished!")
+    print("Fine-tuning softmax models Optimization Finished!")
 
     # Step 6: 학습된 모델이 얼마나 정확한지를 출력한다. (After fine-tuning)
     print("Accuracy(after fine-tuning): ")  # Accuracy ~ 0.9714

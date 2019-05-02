@@ -25,7 +25,7 @@ hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
 cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
-# Test model
+# Test models
 is_correct = tf.equal(tf.arg_max(hypothesis, 1), tf.arg_max(Y, 1))
 # Calculate accuracy
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
@@ -53,7 +53,7 @@ with tf.Session() as sess:
 
     print("Learning finished")
 
-    # Test the model using test sets
+    # Test the models using test sets
     print("Accuracy: ", accuracy.eval(session=sess, feed_dict={
           X: mnist.test.images, Y: mnist.test.labels}))
 

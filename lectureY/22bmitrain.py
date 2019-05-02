@@ -25,7 +25,7 @@ print(x[0:3])
 x_train, y_train = x[:15000], y[:15000]
 x_test, y_test = x[15000:], y[15000:]
 
-# make model
+# make models
 model = Sequential()
 model.add(Dense(512, input_shape=(2,)))
 model.add(Activation('relu'))
@@ -39,7 +39,7 @@ model.add(Activation('softmax'))
 model.compile("rmsprop", "categorical_crossentropy", metrics=['accuracy'])
 
 # train
-# model.fit(x_train, y_train)
+# models.fit(x_train, y_train)
 model.fit(x_train, y_train,
           batch_size=100,
           nb_epoch=20,

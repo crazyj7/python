@@ -2,12 +2,12 @@
 # The contents of this file are in the public domain. See LICENSE_FOR_EXAMPLE_PROGRAMS.txt
 #
 #   This example shows how to run a CNN based face detector using dlib.  The
-#   example loads a pretrained model and uses it to find faces in images.  The
-#   CNN model is much more accurate than the HOG based model shown in the
+#   example loads a pretrained models and uses it to find faces in images.  The
+#   CNN models is much more accurate than the HOG based models shown in the
 #   face_detector.py example, but takes much more computational power to
 #   run, and is meant to be executed on a GPU to attain reasonable speed.
 #
-#   You can download the pre-trained model from:
+#   You can download the pre-trained models from:
 #       http://dlib.net/files/mmod_human_face_detector.dat.bz2
 #
 #   The examples/faces folder contains some jpg images of people.  You can run

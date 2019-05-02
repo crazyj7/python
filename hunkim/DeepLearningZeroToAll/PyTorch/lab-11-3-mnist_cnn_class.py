@@ -109,10 +109,10 @@ class CNN(torch.nn.Module):
         return self.cost
 
 
-# instantiate CNN model
+# instantiate CNN models
 model = CNN()
 
-# train my model
+# train my models
 print('Learning started. It takes sometime.')
 for epoch in range(training_epochs):
     avg_cost = 0
@@ -130,7 +130,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 X_test = Variable(mnist_test.test_data.view(len(mnist_test), 1, 28, 28).float())
 Y_test = Variable(mnist_test.test_labels)
 

@@ -11,7 +11,7 @@ import numpy as np
 import random, sys, os
 
 
-modelname = '31lstm.model'
+modelname = '31lstm.models'
 
 
 if False:
@@ -55,7 +55,7 @@ if not os.path.exists(modelname):
     model.add( Activation('softmax'))
     optimizer = RMSprop(lr=0.01)
     model.compile(optimizer, loss='categorical_crossentropy')
-    model.save('31lstm.model')
+    model.save('31lstm.models')
 else:
     model = load_model(modelname)
 
@@ -74,7 +74,7 @@ for iteration in range(1,10):
     print('-'*50)
     print('inter=', iteration)
     model.fit(X, Y, batch_size=128, nb_epoch=1)
-    model.save('31lstm.model')
+    model.save('31lstm.models')
 
     start_index = random.randint(0, len(text)-maxlen-1)
     for diver in [0.2, 0.5, 1.0, 1.2]:

@@ -14,7 +14,7 @@ from chainer.training import extensions
 
 
 class MLP(chainer.Chain):
-    # Define model to be called later by L.Classifer()
+    # Define models to be called later by L.Classifer()
     # Basic MLP
 
     def __init__(self, n_unit, n_out):
@@ -49,7 +49,7 @@ def main():
     test_iter = chainer.iterators.SerialIterator(test, args.batch_size,
                                                  repeat=False, shuffle=False)
 
-    # Initialize model: Loss function defaults to softmax_cross_entropy.
+    # Initialize models: Loss function defaults to softmax_cross_entropy.
     # 784 is dimension of the inputs, 625 is n_units in hidden layer
     # and 10 is the output dimension.
     model = L.Classifier(MLP(625, 10))
@@ -69,7 +69,7 @@ def main():
     updater = training.StandardUpdater(train_iter, optimizer, device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'))
 
-    # Evaluate the model at end of each epoch
+    # Evaluate the models at end of each epoch
     trainer.extend(extensions.Evaluator(test_iter, model, device=args.gpu))
 
     # Helper functions (extensions) to monitor progress on stdout.

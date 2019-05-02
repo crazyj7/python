@@ -4,29 +4,29 @@
 #
 # This is a pre-trained Deep Neural Network for classifying images.
 # You provide an image or filename for a jpeg-file which will be
-# loaded and input to the Inception model, which will then output
+# loaded and input to the Inception models, which will then output
 # an array of numbers indicating how likely it is that the
 # input-image is of each class.
 #
 # See the example code at the bottom of this file or in the
 # accompanying Python Notebooks.
 #
-# Tutorial #07 shows how to use the Inception model.
+# Tutorial #07 shows how to use the Inception models.
 # Tutorial #08 shows how to use it for Transfer Learning.
 #
 # What is Transfer Learning?
 #
 # Transfer Learning is the use of a Neural Network for classifying
 # images from another data-set than it was trained on. For example,
-# the Inception model was trained on the ImageNet data-set using
-# a very powerful and expensive computer. But the Inception model
+# the Inception models was trained on the ImageNet data-set using
+# a very powerful and expensive computer. But the Inception models
 # can be re-used on data-sets it was not trained on without having
-# to re-train the entire model, even though the number of classes
+# to re-train the entire models, even though the number of classes
 # are different for the two data-sets. This allows you to use the
-# Inception model on your own data-sets without the need for a
+# Inception models on your own data-sets without the need for a
 # very powerful and expensive computer to train it.
 #
-# The last layer of the Inception model before the softmax-classifier
+# The last layer of the Inception models before the softmax-classifier
 # is called the Transfer Layer because the output of that layer will
 # be used as the input in your new softmax-classifier (or as the
 # input for another neural network), which will then be trained on
@@ -64,7 +64,7 @@ import sys
 ########################################################################
 # Various directories and file-names.
 
-# Internet URL for the tar-file with the Inception model.
+# Internet URL for the tar-file with the Inception models.
 # Note that this might change in the future and will need to be updated.
 data_url = "http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz"
 
@@ -85,7 +85,7 @@ path_graph_def = "classify_image_graph_def.pb"
 
 def maybe_download():
     """
-    Download the Inception model from the internet if it does not already
+    Download the Inception models from the internet if it does not already
     exist in the data_dir. The file is about 85 MB.
     """
 
@@ -107,9 +107,9 @@ class NameLookup:
     - uid is a class-id as a string from the ImageNet data-set, e.g. "n00017222".
     - name is the class-name as a string, e.g. "plant, flora, plant life"
 
-    There are actually 1008 output classes of the Inception model
+    There are actually 1008 output classes of the Inception models
     but there are only 1000 named classes in these mapping-files.
-    The remaining 8 output classes of the model should not be used.
+    The remaining 8 output classes of the models should not be used.
     """
 
     def __init__(self):
@@ -222,13 +222,13 @@ class NameLookup:
 
 class Inception:
     """
-    The Inception model is a Deep Neural Network which has already been
+    The Inception models is a Deep Neural Network which has already been
     trained for classifying images into 1000 different categories.
 
-    When you create a new instance of this class, the Inception model
+    When you create a new instance of this class, the Inception models
     will be loaded and can be used immediately without training.
 
-    The Inception model can also be used for Transfer Learning.
+    The Inception models can also be used for Transfer Learning.
     """
 
     # Name of the tensor for feeding the input image as jpeg.
@@ -243,13 +243,13 @@ class Inception:
     tensor_name_resized_image = "ResizeBilinear:0"
 
     # Name of the tensor for the output of the softmax-classifier.
-    # This is used for classifying images with the Inception model.
+    # This is used for classifying images with the Inception models.
     tensor_name_softmax = "softmax:0"
 
     # Name of the tensor for the unscaled outputs of the softmax-classifier (aka. logits).
     tensor_name_softmax_logits = "softmax/logits:0"
 
-    # Name of the tensor for the output of the Inception model.
+    # Name of the tensor for the output of the Inception models.
     # This is used for Transfer Learning.
     tensor_name_transfer_layer = "pool_3:0"
 
@@ -258,7 +258,7 @@ class Inception:
         # Used to print the class-name as a string e.g. "horse" or "plant".
         self.name_lookup = NameLookup()
 
-        # Now load the Inception model from file. The way TensorFlow
+        # Now load the Inception models from file. The way TensorFlow
         # does this is confusing and requires several steps.
 
         # Create a new TensorFlow computational graph.
@@ -284,13 +284,13 @@ class Inception:
                 # Finally we import the graph-def to the default TensorFlow graph.
                 tf.import_graph_def(graph_def, name='')
 
-                # Now self.graph holds the Inception model from the proto-buf file.
+                # Now self.graph holds the Inception models from the proto-buf file.
 
-        # Get the output of the Inception model by looking up the tensor
+        # Get the output of the Inception models by looking up the tensor
         # with the appropriate name for the output of the softmax-classifier.
         self.y_pred = self.graph.get_tensor_by_name(self.tensor_name_softmax)
 
-        # Get the unscaled outputs for the Inception model (aka. softmax-logits).
+        # Get the unscaled outputs for the Inception models (aka. softmax-logits).
         self.y_logits = self.graph.get_tensor_by_name(self.tensor_name_softmax_logits)
 
         # Get the tensor for the resized image that is input to the neural network.
@@ -307,7 +307,7 @@ class Inception:
 
     def close(self):
         """
-        Call this function when you are done using the Inception model.
+        Call this function when you are done using the Inception models.
         It closes the TensorFlow session to release its resources.
         """
 
@@ -362,7 +362,7 @@ class Inception:
 
     def classify(self, image_path=None, image=None):
         """
-        Use the Inception model to classify a single image.
+        Use the Inception models to classify a single image.
 
         The image will be resized automatically to 299 x 299 pixels,
         see the discussion in the Python Notebook for Tutorial #07.
@@ -376,7 +376,7 @@ class Inception:
 
         :return:
             Array of floats (aka. softmax-array) indicating how likely
-            the Inception model thinks the image is of each given class.
+            the Inception models thinks the image is of each given class.
         """
 
         # Create a feed-dict for the TensorFlow graph with the input image.
@@ -392,7 +392,7 @@ class Inception:
 
     def get_resized_image(self, image_path=None, image=None):
         """
-        Input an image to the Inception model and return
+        Input an image to the Inception models and return
         the resized image. The resized image can be plotted so
         we can see what the neural network sees as its input.
 
@@ -459,10 +459,10 @@ class Inception:
     def transfer_values(self, image_path=None, image=None):
         """
         Calculate the transfer-values for the given image.
-        These are the values of the last layer of the Inception model before
-        the softmax-layer, when inputting the image to the Inception model.
+        These are the values of the last layer of the Inception models before
+        the softmax-layer, when inputting the image to the Inception models.
 
-        The transfer-values allow us to use the Inception model in so-called
+        The transfer-values allow us to use the Inception models in so-called
         Transfer Learning for other data-sets and different classifications.
 
         It may take several hours or more to calculate the transfer-values
@@ -483,8 +483,8 @@ class Inception:
         # Create a feed-dict for the TensorFlow graph with the input image.
         feed_dict = self._create_feed_dict(image_path=image_path, image=image)
 
-        # Use TensorFlow to run the graph for the Inception model.
-        # This calculates the values for the last layer of the Inception model
+        # Use TensorFlow to run the graph for the Inception models.
+        # This calculates the values for the last layer of the Inception models
         # prior to the softmax-classification, which we call transfer-values.
         transfer_values = self.session.run(self.transfer_layer, feed_dict=feed_dict)
 
@@ -501,7 +501,7 @@ class Inception:
 def process_images(fn, images=None, image_paths=None):
     """
     Call the function fn() for each image, e.g. transfer_values() from
-    the Inception model above. All the results are concatenated and returned.
+    the Inception models above. All the results are concatenated and returned.
 
     :param fn:
         Function to be called for each image.
@@ -564,7 +564,7 @@ def transfer_values_cache(cache_path, model, images=None, image_paths=None):
 
     Because the transfer-values can be expensive to compute, it can
     be useful to cache the values through this function instead
-    of calling transfer_values() directly on the Inception model.
+    of calling transfer_values() directly on the Inception models.
 
     See Tutorial #08 for an example on how to use this function.
 
@@ -572,7 +572,7 @@ def transfer_values_cache(cache_path, model, images=None, image_paths=None):
         File containing the cached transfer-values for the images.
 
     :param model:
-        Instance of the Inception model.
+        Instance of the Inception models.
 
     :param images:
         4-dim array with images. [image_number, height, width, colour_channel]
@@ -581,12 +581,12 @@ def transfer_values_cache(cache_path, model, images=None, image_paths=None):
         Array of file-paths for images (must be jpeg-format).
 
     :return:
-        The transfer-values from the Inception model for those images.
+        The transfer-values from the Inception models for those images.
     """
 
     # Helper-function for processing the images if the cache-file does not exist.
     # This is needed because we cannot supply both fn=process_images
-    # and fn=model.transfer_values to the cache()-function.
+    # and fn=models.transfer_values to the cache()-function.
     def fn():
         return process_images(fn=model.transfer_values, images=images, image_paths=image_paths)
 
@@ -602,16 +602,16 @@ def transfer_values_cache(cache_path, model, images=None, image_paths=None):
 if __name__ == '__main__':
     print(tf.__version__)
 
-    # Download Inception model if not already done.
+    # Download Inception models if not already done.
     maybe_download()
 
-    # Load the Inception model so it is ready for classifying images.
+    # Load the Inception models so it is ready for classifying images.
     model = Inception()
 
     # Path for a jpeg-image that is included in the downloaded data.
     image_path = os.path.join(data_dir, 'cropped_panda.jpg')
 
-    # Use the Inception model to classify the image.
+    # Use the Inception models to classify the image.
     pred = model.classify(image_path=image_path)
 
     # Print the scores and names for the top-10 predictions.

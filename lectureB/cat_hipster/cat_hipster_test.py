@@ -11,8 +11,8 @@ from math import atan2, degrees
 import random
 
 
-modelsavefile1 = 'cat_hipster1.model'
-modelsavefile2 = 'cat_hipster2.model'
+modelsavefile1 = 'cat_hipster1.models'
+modelsavefile2 = 'cat_hipster2.models'
 
 scale=0.5   # 출력 화면 크기
 img_size = 224

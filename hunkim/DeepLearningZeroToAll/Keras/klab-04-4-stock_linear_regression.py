@@ -50,7 +50,7 @@ model = Sequential()
 model.add(Dense(input_dim=4, units=1))
 model.compile(loss='mse', optimizer='sgd', metrics=['mse'])
 
-# Train a model
+# Train a models
 model.fit(x_train, y_train, epochs=200)
 
 # evaluate

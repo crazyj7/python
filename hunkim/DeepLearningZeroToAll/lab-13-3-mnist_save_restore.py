@@ -125,7 +125,7 @@ else:
 
 start_from = sess.run(last_epoch)
 
-# train my model
+# train my models
 print('Start learning from:', start_from)
 
 for epoch in range(start_from, training_epochs):
@@ -149,11 +149,11 @@ for epoch in range(start_from, training_epochs):
     sess.run(last_epoch.assign(epoch + 1))
     if not os.path.exists(CHECK_POINT_DIR):
         os.makedirs(CHECK_POINT_DIR)
-    saver.save(sess, CHECK_POINT_DIR + "/model", global_step=i)
+    saver.save(sess, CHECK_POINT_DIR + "/models", global_step=i)
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 correct_prediction = tf.equal(tf.argmax(hypothesis, 1), tf.argmax(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 print('Accuracy:', sess.run(accuracy, feed_dict={
@@ -173,7 +173,7 @@ print("Prediction: ", sess.run(
 
 ...
 
-Successfully loaded: ./tb/mnist/model-549
+Successfully loaded: ./tb/mnist/models-549
 Start learning from: 2
 Epoch: 2
 

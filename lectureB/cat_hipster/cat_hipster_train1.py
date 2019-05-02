@@ -10,7 +10,7 @@ from keras.models import load_model
 
 img_size = 224
 
-modelsavefile = 'cat_hipster1.model'
+modelsavefile = 'cat_hipster1.models'
 output_size=4  # 2points(lt,rb)
 
 data_00 = np.load('./cats/CAT_00_1.npy')

@@ -32,7 +32,7 @@ x = tf.placeholder("float", [None, n_input])
 y = tf.placeholder("float", [None, n_classes])
 
 
-# Create model
+# Create models
 def multilayer_perceptron(x, weights, biases):
     # Hidden layer with RELU activation
     layer_1 = tf.add(tf.matmul(x, weights['h1']), biases['b1'])
@@ -56,7 +56,7 @@ biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
-# Construct model
+# Construct models
 pred = multilayer_perceptron(x, weights, biases)
 
 # Define loss and optimizer
@@ -88,7 +88,7 @@ with tf.Session() as sess:
                 "{:.9f}".format(avg_cost))
     print("Optimization Finished!")
 
-    # Test model
+    # Test models
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))

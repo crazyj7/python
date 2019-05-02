@@ -19,7 +19,7 @@ x = data
 x = x.astype("float") / 256
 print(x.shape)
 
-model = load_model('img2vec.model')
+model = load_model('img2vec.models')
 category = ["chair", "camera", "butterfly"]
 
 x_test = np.array( [x] )

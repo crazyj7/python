@@ -61,14 +61,14 @@ class CNN(torch.nn.Module):
         return out
 
 
-# instantiate CNN model
+# instantiate CNN models
 model = CNN()
 
 # define cost/loss & optimizer
 criterion = torch.nn.CrossEntropyLoss()    # Softmax is internally computed.
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# train my model
+# train my models
 print('Learning started. It takes sometime.')
 for epoch in range(training_epochs):
     avg_cost = 0
@@ -90,8 +90,8 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
-model.eval()    # set the model to evaluation mode (dropout=False)
+# Test models and check accuracy
+model.eval()    # set the models to evaluation mode (dropout=False)
 
 X_test = Variable(mnist_test.test_data.view(len(mnist_test), 1, 28, 28).float())
 Y_test = Variable(mnist_test.test_labels)

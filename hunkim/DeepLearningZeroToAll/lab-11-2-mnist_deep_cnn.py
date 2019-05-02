@@ -104,7 +104,7 @@ optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
-# train my model
+# train my models
 print('Learning started. It takes sometime.')
 for epoch in range(training_epochs):
     avg_cost = 0
@@ -120,7 +120,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 
 # if you have a OOM error, please refer to lab-11-X-mnist_deep_cnn_low_memory.py
 

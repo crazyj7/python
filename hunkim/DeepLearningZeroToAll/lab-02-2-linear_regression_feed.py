@@ -44,7 +44,7 @@ for step in range(2001):
 2000 1.20761e-05 [ 1.00403607] [-0.00917497]
 '''
 
-# Testing our model
+# Testing our models
 print(sess.run(hypothesis, feed_dict={X: [5]}))
 print(sess.run(hypothesis, feed_dict={X: [2.5]}))
 print(sess.run(hypothesis, feed_dict={X: [1.5, 3.5]}))
@@ -65,7 +65,7 @@ for step in range(2001):
     if step % 20 == 0:
         print(step, cost_val, W_val, b_val)
 
-# Testing our model
+# Testing our models
 print(sess.run(hypothesis, feed_dict={X: [5]}))
 print(sess.run(hypothesis, feed_dict={X: [2.5]}))
 print(sess.run(hypothesis, feed_dict={X: [1.5, 3.5]}))

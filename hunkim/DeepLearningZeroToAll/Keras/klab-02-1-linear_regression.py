@@ -13,7 +13,7 @@ model.add(Dense(1, input_dim=1))
 sgd = optimizers.SGD(lr=0.1)
 model.compile(loss='mse', optimizer=sgd)
 
-# prints summary of the model to the terminal
+# prints summary of the models to the terminal
 model.summary()
 
 model.fit(x_train, y_train, epochs=200)

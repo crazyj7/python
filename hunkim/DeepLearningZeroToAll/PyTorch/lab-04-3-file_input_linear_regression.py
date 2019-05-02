@@ -26,7 +26,7 @@ criterion = nn.MSELoss()
 # Minimize
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
 
-# Train the model
+# Train the models
 for step in range(2001):
     optimizer.zero_grad()
     # Our hypothesis

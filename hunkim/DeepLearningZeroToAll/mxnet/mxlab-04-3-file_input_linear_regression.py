@@ -37,12 +37,12 @@ net.bind(data_shapes=[mx.io.DataDesc(name='data', shape=(batch_size, dimension),
 net.init_params(initializer=mx.init.Normal(sigma=0.01))
 net.init_optimizer(optimizer='sgd', optimizer_params={'learning_rate': 1E-4, 'momentum': 0.9})
 
-# 4. Train the model
-# First constructing the training iterator and then fit the model
+# 4. Train the models
+# First constructing the training iterator and then fit the models
 train_iter = mx.io.NDArrayIter(x_data, y_data, batch_size, shuffle=True, label_name='target')
 net.fit(train_data=train_iter, eval_metric="mse", num_epoch=2000)
 
-# 5. Test the model
+# 5. Test the models
 test_net = mx.mod.Module(symbol=fc,
                          data_names=['data'],
                          label_names=None,

@@ -7,10 +7,10 @@ tf.set_random_seed(777)  # for reproducibility
 X = [1, 2, 3]
 Y = [1, 2, 3]
 
-# Set wrong model weights
+# Set wrong models weights
 W = tf.Variable(5.)
 
-# Linear model
+# Linear models
 hypothesis = X * W
 
 # Manual gradient

@@ -15,7 +15,7 @@ decay_rate = 0.99 # decay factor for RMSProp leaky sum of grad^2
 resume = False
 render = True
 
-# model initialization
+# models initialization
 D = 80 * 80 # input dimensionality: 80x80 grid
 if resume:
   model = pickle.load(open('save.p', 'rb'))
@@ -24,7 +24,7 @@ else:
   model['W1'] = np.random.randn(H,D) / np.sqrt(D) # "Xavier" initialization
   model['W2'] = np.random.randn(H) / np.sqrt(H)
   
-# grad_buffer = { k : np.zeros_like(v) for k,v in model.iteritems() } # update buffers that add up gradients over a batch
+# grad_buffer = { k : np.zeros_like(v) for k,v in models.iteritems() } # update buffers that add up gradients over a batch
 grad_buffer = { k : np.zeros_like(v) for k,v in model.items() } # update buffers that add up gradients over a batch
 rmsprop_cache = { k : np.zeros_like(v) for k,v in model.items() } # rmsprop memory
 
@@ -118,7 +118,7 @@ while True:
 
     # perform rmsprop parameter update every batch_size episodes
     if episode_number % batch_size == 0:
-      #for k,v in model.iteritems():
+      #for k,v in models.iteritems():
       for k, v in model.items():
         g = grad_buffer[k] # gradient
         rmsprop_cache[k] = decay_rate * rmsprop_cache[k] + (1 - decay_rate) * g**2

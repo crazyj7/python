@@ -20,7 +20,7 @@ criterion = nn.MSELoss()
 # Minimize
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-# Train the model
+# Train the models
 for step in range(2001):
     optimizer.zero_grad()
     # Our hypothesis
@@ -33,7 +33,7 @@ for step in range(2001):
         print(step, cost.data.numpy(), model.weight.data.numpy(), model.bias.data.numpy())
 
 
-# Testing our model
+# Testing our models
 predicted = model(Variable(torch.Tensor([[5]])))
 print(predicted.data.numpy())
 predicted = model(Variable(torch.Tensor([[2.5]])))

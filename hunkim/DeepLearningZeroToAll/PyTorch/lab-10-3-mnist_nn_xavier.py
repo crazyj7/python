@@ -39,14 +39,14 @@ torch.nn.init.xavier_uniform(linear1.weight)
 torch.nn.init.xavier_uniform(linear2.weight)
 torch.nn.init.xavier_uniform(linear3.weight)
 
-# model
+# models
 model = torch.nn.Sequential(linear1, relu, linear2, relu, linear3)
 
 # define cost/loss & optimizer
 criterion = torch.nn.CrossEntropyLoss()    # Softmax is internally computed.
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# train my model
+# train my models
 for epoch in range(training_epochs):
     avg_cost = 0
     total_batch = len(mnist_train) // batch_size
@@ -68,7 +68,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 X_test = Variable(mnist_test.test_data.view(-1, 28 * 28).float())
 Y_test = Variable(mnist_test.test_labels)
 

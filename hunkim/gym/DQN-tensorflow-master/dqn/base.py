@@ -11,7 +11,7 @@ def class_vars(obj):
       if not k.startswith('__') and not callable(k)}
 
 class BaseModel(object):
-  """Abstract object representing an Reader model."""
+  """Abstract object representing an Reader models."""
   def __init__(self, config):
     self._saver = None
     self.config = config

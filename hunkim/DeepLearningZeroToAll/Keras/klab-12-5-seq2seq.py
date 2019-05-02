@@ -43,7 +43,7 @@ dataY = np_utils.to_categorical(dataY, num_classes=num_classes)
 dataY = np.reshape(dataY, (-1, seq_length, data_dim))
 
 
-print('Build model...')
+print('Build models...')
 TensorBoard(log_dir='./logs', histogram_freq=1,
             write_graph=True, write_images=False)
 
@@ -68,7 +68,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 model.fit(dataX, dataY, epochs=1000)
 
-# Store model graph in png
+# Store models graph in png
 # (Error occurs on in python interactive shell)
 plot_model(model, to_file=os.path.basename(__file__) + '.png', show_shapes=True)
 

@@ -78,14 +78,14 @@ class RNN(nn.Module):
         return out
 
 
-# Instantiate RNN model
+# Instantiate RNN models
 rnn = RNN(num_classes, input_size, hidden_size, num_layers)
 
 # Set loss and optimizer function
 criterion = torch.nn.CrossEntropyLoss()    # Softmax is internally computed.
 optimizer = torch.optim.Adam(rnn.parameters(), lr=learning_rate)
 
-# Train the model
+# Train the models
 for epoch in range(num_epochs):
     outputs = rnn(inputs)
     optimizer.zero_grad()

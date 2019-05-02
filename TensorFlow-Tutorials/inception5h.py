@@ -2,14 +2,14 @@
 #
 # The Inception Model 5h for TensorFlow.
 #
-# This variant of the Inception model is easier to use for DeepDream
+# This variant of the Inception models is easier to use for DeepDream
 # and other imaging techniques. This is because it allows the input
 # image to be any size, and the optimized images are also prettier.
 #
-# It is unclear which Inception model this implements because the
+# It is unclear which Inception models this implements because the
 # Google developers have (as usual) neglected to document it.
-# It is dubbed the 5h-model because that is the name of the zip-file,
-# but it is apparently simpler than the v.3 model.
+# It is dubbed the 5h-models because that is the name of the zip-file,
+# but it is apparently simpler than the v.3 models.
 #
 # See the Python Notebook for Tutorial #14 for an example usage.
 #
@@ -35,7 +35,7 @@ import os
 ########################################################################
 # Various directories and file-names.
 
-# Internet URL for the tar-file with the Inception model.
+# Internet URL for the tar-file with the Inception models.
 # Note that this might change in the future and will need to be updated.
 data_url = "http://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip"
 
@@ -50,7 +50,7 @@ path_graph_def = "tensorflow_inception_graph.pb"
 
 def maybe_download():
     """
-    Download the Inception model from the internet if it does not already
+    Download the Inception models from the internet if it does not already
     exist in the data_dir. The file is about 50 MB.
     """
 
@@ -63,24 +63,24 @@ def maybe_download():
 
 class Inception5h:
     """
-    The Inception model is a Deep Neural Network which has already been
+    The Inception models is a Deep Neural Network which has already been
     trained for classifying images into 1000 different categories.
 
-    When you create a new instance of this class, the Inception model
+    When you create a new instance of this class, the Inception models
     will be loaded and can be used immediately without training.
     """
 
     # Name of the tensor for feeding the input image.
     tensor_name_input_image = "input:0"
 
-    # Names for some of the commonly used layers in the Inception model.
+    # Names for some of the commonly used layers in the Inception models.
     layer_names = ['conv2d0', 'conv2d1', 'conv2d2',
                    'mixed3a', 'mixed3b',
                    'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e',
                    'mixed5a', 'mixed5b']
 
     def __init__(self):
-        # Now load the Inception model from file. The way TensorFlow
+        # Now load the Inception models from file. The way TensorFlow
         # does this is confusing and requires several steps.
 
         # Create a new TensorFlow computational graph.
@@ -106,7 +106,7 @@ class Inception5h:
                 # Finally we import the graph-def to the default TensorFlow graph.
                 tf.import_graph_def(graph_def, name='')
 
-                # Now self.graph holds the Inception model from the proto-buf file.
+                # Now self.graph holds the Inception models from the proto-buf file.
 
             # Get a reference to the tensor for inputting images to the graph.
             self.input = self.graph.get_tensor_by_name(self.tensor_name_input_image)
@@ -128,7 +128,7 @@ class Inception5h:
 
         # Expand 3-dim array to 4-dim by prepending an 'empty' dimension.
         # This is because we are only feeding a single image, but the
-        # Inception model was built to take multiple images as input.
+        # Inception models was built to take multiple images as input.
         image = np.expand_dims(image, axis=0)
 
         # Image is passed in as a 3-dim array of raw pixel-values.

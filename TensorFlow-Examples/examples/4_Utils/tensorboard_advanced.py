@@ -35,7 +35,7 @@ x = tf.placeholder(tf.float32, [None, 784], name='InputData')
 y = tf.placeholder(tf.float32, [None, 10], name='LabelData')
 
 
-# Create model
+# Create models
 def multilayer_perceptron(x, weights, biases):
     # Hidden layer with RELU activation
     layer_1 = tf.add(tf.matmul(x, weights['w1']), biases['b1'])
@@ -66,7 +66,7 @@ biases = {
 # Encapsulating all ops into scopes, making Tensorboard's Graph
 # Visualization more convenient
 with tf.name_scope('Model'):
-    # Build model
+    # Build models
     pred = multilayer_perceptron(x, weights, biases)
 
 with tf.name_scope('Loss'):
@@ -132,7 +132,7 @@ with tf.Session() as sess:
 
     print("Optimization Finished!")
 
-    # Test model
+    # Test models
     # Calculate accuracy
     print("Accuracy:", acc.eval({x: mnist.test.images, y: mnist.test.labels}))
 

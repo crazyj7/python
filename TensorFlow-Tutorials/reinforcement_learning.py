@@ -850,7 +850,7 @@ class ReplayMemory:
     def estimate_all_q_values(self, model):
         """
         Estimate all Q-values for the states in the replay-memory
-        using the model / Neural Network.
+        using the models / Neural Network.
 
         Note that this function is not currently being used. It is provided
         to make it easier for you to experiment with this code, by showing

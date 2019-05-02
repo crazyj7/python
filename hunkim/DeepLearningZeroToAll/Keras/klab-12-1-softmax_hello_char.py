@@ -46,7 +46,7 @@ model.add(Dense(num_classes, input_shape=(
     timesteps, data_dim)))
 model.add(Activation('softmax'))
 model.summary()
-# Store model graph in png
+# Store models graph in png
 # (Error occurs on in python interactive shell)
 plot_model(model, to_file=os.path.basename(__file__) + '.png', show_shapes=True)
 

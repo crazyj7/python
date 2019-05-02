@@ -102,7 +102,7 @@ sess.run(tf.global_variables_initializer())
 
 print('Learning Started!')
 
-# train my model
+# train my models
 for epoch in range(training_epochs):
     avg_cost = 0
     total_batch = int(mnist.train.num_examples / batch_size)
@@ -116,5 +116,5 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 print('Accuracy:', m1.get_accuracy(mnist.test.images, mnist.test.labels))

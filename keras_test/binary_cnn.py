@@ -40,7 +40,7 @@ y_test = y_test % 2
 # 2. 모델 구성하기
 if os.path.exists('binary_cnn.h5'):
 
-    # model = load_model('binary_cnn.h5')
+    # models = load_model('binary_cnn.h5')
 
     # split loading test
     with open('binary_cnn_model.json', 'r') as f:
@@ -114,7 +114,7 @@ else:
     plt.show()
 
     if not os.path.exists('binary_cnn.h5'):
-        model.save('binary_cnn.h5')  # save all. (network model, weighs)
+        model.save('binary_cnn.h5')  # save all. (network models, weighs)
 
     # save split
     with open('binary_cnn_model.json', 'w') as f:

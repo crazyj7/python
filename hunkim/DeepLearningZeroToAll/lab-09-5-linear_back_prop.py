@@ -18,7 +18,7 @@ y_data = [[1.],
 X = tf.placeholder(tf.float32, shape=[None, 1])
 Y = tf.placeholder(tf.float32, shape=[None, 1])
 
-# Set wrong model weights
+# Set wrong models weights
 W = tf.Variable(tf.truncated_normal([1, 1]))
 b = tf.Variable(5.)
 

@@ -34,8 +34,8 @@ net.bind(data_shapes=[mx.io.DataDesc(name='data', shape=(batch_size, dimension),
 net.init_params(initializer=mx.init.Normal(sigma=0.01))
 net.init_optimizer(optimizer='sgd', optimizer_params={'learning_rate': 1E-3, 'momentum': 0.9})
 
-# 4. Train the model
-# First constructing the training iterator and then fit the model
+# 4. Train the models
+# First constructing the training iterator and then fit the models
 train_iter = mx.io.NDArrayIter(x_data, y_data, batch_size, shuffle=True, label_name='target')
 metric = mx.metric.CustomMetric(feval=lambda labels, pred: ((pred > 0.5) == labels).mean(),
                                 name="acc")
@@ -55,7 +55,7 @@ INFO:root:Epoch[199] Train-acc=0.769531
 INFO:root:Epoch[199] Time cost=0.012
 '''
 
-# 5. Test the model
+# 5. Test the models
 test_iter = mx.io.NDArrayIter(x_data, None, batch_size, shuffle=False, label_name=None)
 
 pred_class = (fc > 0)

@@ -28,11 +28,11 @@ x = tf.placeholder(tf.float32, [None, 784], name='InputData')
 # 0-9 digits recognition => 10 classes
 y = tf.placeholder(tf.float32, [None, 10], name='LabelData')
 
-# Set model weights
+# Set models weights
 W = tf.Variable(tf.zeros([784, 10]), name='Weights')
 b = tf.Variable(tf.zeros([10]), name='Bias')
 
-# Construct model and encapsulating all ops into scopes, making
+# Construct models and encapsulating all ops into scopes, making
 # Tensorboard's Graph visualization more convenient
 with tf.name_scope('Model'):
     # Model
@@ -86,7 +86,7 @@ with tf.Session() as sess:
 
     print("Optimization Finished!")
 
-    # Test model
+    # Test models
     # Calculate accuracy
     print("Accuracy:", acc.eval({x: mnist.test.images, y: mnist.test.labels}))
 

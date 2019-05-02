@@ -22,7 +22,7 @@ ax.set_ylabel('x2')
 ax.set_zlabel('Y')
 
 
-# model : y = a1 x1 + a2 x2 + a3
+# models : y = a1 x1 + a2 x2 + a3
 mx1 = np.average(A[:,0])
 mx2 = np.average(A[:,1])
 my = np.average(b[:,0])

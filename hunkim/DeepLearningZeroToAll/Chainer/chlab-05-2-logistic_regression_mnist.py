@@ -13,7 +13,7 @@ from chainer.training import extensions
 
 
 class MyModel(chainer.Chain):
-    # Define model to be called later by L.Classifer()
+    # Define models to be called later by L.Classifer()
 
     def __init__(self, n_out):
         super(MyModel, self).__init__(
@@ -37,8 +37,8 @@ def main():
     test_iter = chainer.iterators.SerialIterator(test, batch_size,
                                                  repeat=False, shuffle=False)
 
-    # Initialize model: Loss function defaults to softmax_cross_entropy.
-    # Can keep same model used in linear regression.
+    # Initialize models: Loss function defaults to softmax_cross_entropy.
+    # Can keep same models used in linear regression.
     model = L.Classifier(MyModel(10))
 
     # Define optimizer (SGD, Adam, RMSProp, etc)
@@ -50,7 +50,7 @@ def main():
     updater = training.StandardUpdater(train_iter, optimizer)
     trainer = training.Trainer(updater, (epoch, 'epoch'))
 
-    # Evaluate the model at end of each epoch
+    # Evaluate the models at end of each epoch
     trainer.extend(extensions.Evaluator(test_iter, model))
 
     # Helper functions (extensions) to monitor progress on stdout.

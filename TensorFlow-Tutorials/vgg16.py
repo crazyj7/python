@@ -2,8 +2,8 @@
 #
 # The pre-trained VGG16 Model for TensorFlow.
 #
-# This model seems to produce better-looking images in Style Transfer
-# than the Inception 5h model that otherwise works well for DeepDream.
+# This models seems to produce better-looking images in Style Transfer
+# than the Inception 5h models that otherwise works well for DeepDream.
 #
 # See the Python Notebook for Tutorial #15 for an example usage.
 #
@@ -29,13 +29,13 @@ import os
 ########################################################################
 # Various directories and file-names.
 
-# The pre-trained VGG16 model is taken from this tutorial:
+# The pre-trained VGG16 models is taken from this tutorial:
 # https://github.com/pkmital/CADL/blob/master/session-4/libs/vgg16.py
 
 # The class-names are available in the following URL:
 # https://s3.amazonaws.com/cadl/models/synset.txt
 
-# Internet URL for the file with the VGG16 model.
+# Internet URL for the file with the VGG16 models.
 # Note that this might change in the future and will need to be updated.
 data_url = "https://s3.amazonaws.com/cadl/models/vgg16.tfmodel"
 
@@ -50,7 +50,7 @@ path_graph_def = "vgg16.tfmodel"
 
 def maybe_download():
     """
-    Download the VGG16 model from the internet if it does not already
+    Download the VGG16 models from the internet if it does not already
     exist in the data_dir. WARNING! The file is about 550 MB.
     """
 
@@ -67,10 +67,10 @@ def maybe_download():
 
 class VGG16:
     """
-    The VGG16 model is a Deep Neural Network which has already been
+    The VGG16 models is a Deep Neural Network which has already been
     trained for classifying images into 1000 different categories.
 
-    When you create a new instance of this class, the VGG16 model
+    When you create a new instance of this class, the VGG16 models
     will be loaded and can be used immediately without training.
     """
 
@@ -81,7 +81,7 @@ class VGG16:
     tensor_name_dropout = 'dropout/random_uniform:0'
     tensor_name_dropout1 = 'dropout_1/random_uniform:0'
 
-    # Names for the convolutional layers in the model for use in Style Transfer.
+    # Names for the convolutional layers in the models for use in Style Transfer.
     layer_names = ['conv1_1/conv1_1', 'conv1_2/conv1_2',
                    'conv2_1/conv2_1', 'conv2_2/conv2_2',
                    'conv3_1/conv3_1', 'conv3_2/conv3_2', 'conv3_3/conv3_3',
@@ -89,7 +89,7 @@ class VGG16:
                    'conv5_1/conv5_1', 'conv5_2/conv5_2', 'conv5_3/conv5_3']
 
     def __init__(self):
-        # Now load the model from file. The way TensorFlow
+        # Now load the models from file. The way TensorFlow
         # does this is confusing and requires several steps.
 
         # Create a new TensorFlow computational graph.
@@ -115,7 +115,7 @@ class VGG16:
                 # Finally we import the graph-def to the default TensorFlow graph.
                 tf.import_graph_def(graph_def, name='')
 
-                # Now self.graph holds the VGG16 model from the proto-buf file.
+                # Now self.graph holds the VGG16 models from the proto-buf file.
 
             # Get a reference to the tensor for inputting images to the graph.
             self.input = self.graph.get_tensor_by_name(self.tensor_name_input_image)
@@ -167,11 +167,11 @@ class VGG16:
 
         # Expand 3-dim array to 4-dim by prepending an 'empty' dimension.
         # This is because we are only feeding a single image, but the
-        # VGG16 model was built to take multiple images as input.
+        # VGG16 models was built to take multiple images as input.
         image = np.expand_dims(image, axis=0)
 
         if False:
-            # In the original code using this VGG16 model, the random values
+            # In the original code using this VGG16 models, the random values
             # for the dropout are fixed to 1.0.
             # Experiments suggest that it does not seem to matter for
             # Style Transfer, and this causes an error with a GPU.

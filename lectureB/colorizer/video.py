@@ -32,7 +32,7 @@ weights = './models/colorization_release_v2.caffemodel'
 pts_in_hull = np.load('./models/pts_in_hull.npy')
 pts_in_hull = pts_in_hull.transpose().reshape(2, 313, 1, 1).astype(np.float32)
 
-# load model
+# load models
 net = cv2.dnn.readNetFromCaffe(proto, weights)
 # net.getLayerNames()
 

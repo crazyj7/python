@@ -8,7 +8,7 @@ Y = [1, 2, 3]
 
 W = tf.placeholder(tf.float32)
 
-# Our hypothesis for linear model X * W
+# Our hypothesis for linear models X * W
 hypothesis = X * W
 
 # cost/loss function

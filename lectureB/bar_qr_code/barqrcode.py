@@ -1,6 +1,6 @@
 
 '''
-
+zbar 라이브러리를 사용하여 바코드, QR코드 인식기 만들기
 '''
 
 import pyzbar.pyzbar as pyzbar

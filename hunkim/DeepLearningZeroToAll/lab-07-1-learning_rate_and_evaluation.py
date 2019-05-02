@@ -20,7 +20,7 @@ y_data = [[0, 0, 1],
           [1, 0, 0]]
 
 
-# Evaluation our model using this test datasets
+# Evaluation our models using this test datasets
 x_test = [[2, 1, 1],
           [3, 1, 2],
           [3, 3, 4]]
@@ -44,7 +44,7 @@ cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
 optimizer = tf.train.GradientDescentOptimizer(
     learning_rate=1e-10).minimize(cost)
 
-# Correct prediction Test model
+# Correct prediction Test models
 prediction = tf.arg_max(hypothesis, 1)
 is_correct = tf.equal(prediction, tf.arg_max(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))

@@ -13,7 +13,7 @@ W = tf.Variable(tf.random_normal([1]), name='weight')
 X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
 
-# Our hypothesis for linear model X * W
+# Our hypothesis for linear models X * W
 hypothesis = X * W
 
 # cost/loss function

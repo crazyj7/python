@@ -29,8 +29,8 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 
 
 # ==============================================================================
-# build model
-# (model code from http://iostream.tistory.com/111)
+# build models
+# (models code from http://iostream.tistory.com/111)
 model = Sequential()
 
 model.add(Dense(256, input_dim=784,

@@ -24,6 +24,6 @@ with open("toji01.wakati", "w", encoding="utf-8") as fp:
 
 data = word2vec.LineSentence("toji01.wakati")
 model = word2vec.Word2Vec(data, size=200, window=10, hs=1, min_count=2, sg=1)
-model.save('toji.model')
+model.save('toji.models')
 
 

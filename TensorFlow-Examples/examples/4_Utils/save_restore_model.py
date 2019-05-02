@@ -1,5 +1,5 @@
 '''
-Save and Restore a model using TensorFlow.
+Save and Restore a models using TensorFlow.
 This example is using the MNIST database of handwritten digits
 (http://yann.lecun.com/exdb/mnist/)
 
@@ -19,7 +19,7 @@ import tensorflow as tf
 learning_rate = 0.001
 batch_size = 100
 display_step = 1
-model_path = "/tmp/model.ckpt"
+model_path = "/tmp/models.ckpt"
 
 # Network Parameters
 n_hidden_1 = 256 # 1st layer number of features
@@ -32,7 +32,7 @@ x = tf.placeholder("float", [None, n_input])
 y = tf.placeholder("float", [None, n_classes])
 
 
-# Create model
+# Create models
 def multilayer_perceptron(x, weights, biases):
     # Hidden layer with RELU activation
     layer_1 = tf.add(tf.matmul(x, weights['h1']), biases['b1'])
@@ -56,7 +56,7 @@ biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
-# Construct model
+# Construct models
 pred = multilayer_perceptron(x, weights, biases)
 
 # Define loss and optimizer
@@ -93,13 +93,13 @@ with tf.Session() as sess:
                 "{:.9f}".format(avg_cost))
     print("First Optimization Finished!")
 
-    # Test model
+    # Test models
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print("Accuracy:", accuracy.eval({x: mnist.test.images, y: mnist.test.labels}))
 
-    # Save model weights to disk
+    # Save models weights to disk
     save_path = saver.save(sess, model_path)
     print("Model saved in file: %s" % save_path)
 
@@ -109,7 +109,7 @@ with tf.Session() as sess:
     # Initialize variables
     sess.run(init)
 
-    # Restore model weights from previously saved model
+    # Restore models weights from previously saved models
     saver.restore(sess, model_path)
     print("Model restored from file: %s" % save_path)
 
@@ -131,7 +131,7 @@ with tf.Session() as sess:
                 "{:.9f}".format(avg_cost))
     print("Second Optimization Finished!")
 
-    # Test model
+    # Test models
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))

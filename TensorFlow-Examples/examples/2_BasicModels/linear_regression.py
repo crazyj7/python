@@ -28,11 +28,11 @@ n_samples = train_X.shape[0]
 X = tf.placeholder("float")
 Y = tf.placeholder("float")
 
-# Set model weights
+# Set models weights
 W = tf.Variable(rng.randn(), name="weight")
 b = tf.Variable(rng.randn(), name="bias")
 
-# Construct a linear model
+# Construct a linear models
 pred = tf.add(tf.multiply(X, W), b)
 
 # Mean squared error

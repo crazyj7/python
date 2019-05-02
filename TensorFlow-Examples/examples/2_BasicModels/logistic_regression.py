@@ -25,11 +25,11 @@ display_step = 1
 x = tf.placeholder(tf.float32, [None, 784]) # mnist data image of shape 28*28=784
 y = tf.placeholder(tf.float32, [None, 10]) # 0-9 digits recognition => 10 classes
 
-# Set model weights
+# Set models weights
 W = tf.Variable(tf.zeros([784, 10]))
 b = tf.Variable(tf.zeros([10]))
 
-# Construct model
+# Construct models
 pred = tf.nn.softmax(tf.matmul(x, W) + b) # Softmax
 
 # Minimize error using cross entropy
@@ -62,7 +62,7 @@ with tf.Session() as sess:
 
     print("Optimization Finished!")
 
-    # Test model
+    # Test models
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))

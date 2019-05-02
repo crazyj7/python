@@ -11,13 +11,13 @@ Written by Waleed Abdulla
 Usage: import the module (see Jupyter notebooks for examples), or run from
        the command line as such:
 
-    # Train a new model starting from pre-trained COCO weights
+    # Train a new models starting from pre-trained COCO weights
     python3 balloon.py train --datasets=/path/to/balloon/datasets --weights=coco
 
-    # Resume training a model that you had trained earlier
+    # Resume training a models that you had trained earlier
     python3 balloon.py train --datasets=/path/to/balloon/datasets --weights=last
 
-    # Train a new model starting from ImageNet weights
+    # Train a new models starting from ImageNet weights
     python3 balloon.py train --datasets=/path/to/balloon/datasets --weights=imagenet
 
     # Apply color splash to an image
@@ -49,7 +49,7 @@ import model as modellib
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
-# Directory to save logs and model checkpoints, if not provided
+# Directory to save logs and models checkpoints, if not provided
 # through the command line argument --logs
 DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
 
@@ -176,7 +176,7 @@ class BalloonDataset(utils.Dataset):
 
 
 def train(model):
-    """Train the model."""
+    """Train the models."""
     # Training datasets.
     dataset_train = BalloonDataset()
     dataset_train.load_balloon(args.dataset, "train")
@@ -223,7 +223,7 @@ def detect_and_color_splash(model, image_path=None, video_path=None):
 
     # Image or video?
     if image_path:
-        # Run model detection and generate the color splash effect
+        # Run models detection and generate the color splash effect
         print("Running on {}".format(args.image))
         # Read image
         image = skimage.io.imread(args.image)
@@ -324,7 +324,7 @@ if __name__ == '__main__':
         config = InferenceConfig()
     config.display()
 
-    # Create model
+    # Create models
     if args.command == "train":
         model = modellib.MaskRCNN(mode="training", config=config,
                                   model_dir=args.logs)

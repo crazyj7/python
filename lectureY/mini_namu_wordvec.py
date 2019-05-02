@@ -113,14 +113,14 @@ if __name__ == "__main__":
     filename ='mini_namu.json'
     filename2='mini_namu.txt'
     filename3='mini_namu.wakati'
-    filename4='mini_namu.model'
+    filename4='mini_namu.models'
     filename5='mini_namu.pkl'
 
     #real namu
     filename ='./hub/namu.json'
     filename2='./hub/namu.txt'
     filename3='./hub/namu.wakati'
-    filename4='./hub/namu.model'
+    filename4='./hub/namu.models'
     filename5='./hub/namu.pkl'
 
     # load_json(filename)

@@ -53,7 +53,7 @@ model.add(Activation('linear'))
 
 model.summary()
 
-# Store model graph in png
+# Store models graph in png
 # (Error occurs on in python interactive shell)
 plot_model(model, to_file=os.path.basename(__file__) + '.png', show_shapes=True)
 

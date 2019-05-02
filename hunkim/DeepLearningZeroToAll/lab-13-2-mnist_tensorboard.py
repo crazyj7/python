@@ -108,7 +108,7 @@ global_step = 0
 
 print('Start learning!')
 
-# train my model
+# train my models
 for epoch in range(training_epochs):
     avg_cost = 0
     total_batch = int(mnist.train.num_examples / batch_size)
@@ -126,7 +126,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 correct_prediction = tf.equal(tf.argmax(hypothesis, 1), tf.argmax(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 print('Accuracy:', sess.run(accuracy, feed_dict={

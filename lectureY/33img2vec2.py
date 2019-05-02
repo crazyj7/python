@@ -23,7 +23,7 @@ x_train = x_train.astype("float") / 256
 x_test = x_test.astype("float") / 256
 print('x shape', x_train.shape)
 
-# make model
+# make models
 model = Sequential()
 model.add(Convolution2D(32, kernel_size=3, strides=3, padding='same',
                         input_shape=(image_h, image_w, 3)))
@@ -52,7 +52,7 @@ model.fit(x_train, y_train, batch_size=10, epochs=200)
 score = model.evaluate(x_test, y_test)
 print('loss=', score[0])
 print('acc=', score[1])
-model.save('img2vec.model')
+model.save('img2vec.models')
 print('ok')
 
 

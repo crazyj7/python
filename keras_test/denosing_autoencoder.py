@@ -65,7 +65,7 @@ if False:
     plt.show()
 
 
-# make model
+# make models
 # if not os.path.exists(savemodel):
 if True:
     model = Sequential()
@@ -83,9 +83,9 @@ if True:
               # validation_data=(x_test_noisy, x_test))
 
     model.save(savemodel)
-    print('save model...')
+    print('save models...')
 else :
-    print('load model...')
+    print('load models...')
     model = load_model(savemodel)
 
 

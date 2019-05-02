@@ -29,7 +29,7 @@ import time
 # Root directory of the project
 ROOT_DIR = os.getcwd()
 
-# Directory to save logs and trained model
+# Directory to save logs and trained models
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Local path to trained weights file
@@ -44,7 +44,7 @@ IMAGE_DIR = os.path.join(ROOT_DIR, "images")
 
 # ## Configurations
 # 
-# We'll be using a model trained on the MS-COCO dataset. The configurations of this model are in the ```CocoConfig``` class in ```coco.py```.
+# We'll be using a models trained on the MS-COCO dataset. The configurations of this models are in the ```CocoConfig``` class in ```coco.py```.
 # 
 # For inferencing, modify the configurations a bit to fit the task. To do so, sub-class the ```CocoConfig``` class and override the attributes you need to change.
 
@@ -62,7 +62,7 @@ config.display()
 
 # ## Create Model and Load Trained Weights
 
-# Create model object in inference mode.
+# Create models object in inference mode.
 model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
 
 # Load weights trained on MS-COCO
@@ -71,7 +71,7 @@ model.load_weights(COCO_MODEL_PATH, by_name=True)
 
 # ## Class Names
 # 
-# The model classifies objects and returns class IDs, which are integer value that identify each class. Some datasets assign integer values to their classes and some don't. For example, in the MS-COCO dataset, the 'person' class is 1 and 'teddy bear' is 88. The IDs are often sequential, but not always. The COCO dataset, for example, has classes associated with class IDs 70 and 72, but not 71.
+# The models classifies objects and returns class IDs, which are integer value that identify each class. Some datasets assign integer values to their classes and some don't. For example, in the MS-COCO dataset, the 'person' class is 1 and 'teddy bear' is 88. The IDs are often sequential, but not always. The COCO dataset, for example, has classes associated with class IDs 70 and 72, but not 71.
 # 
 # To improve consistency, and to support training on data from multiple sources at the same time, our ```Dataset``` class assigns it's own sequential integer IDs to each class. For example, if you load the COCO dataset using our ```Dataset``` class, the 'person' class would get class ID = 1 (just like COCO) and the 'teddy bear' class is 78 (different from COCO). Keep that in mind when mapping class IDs to class names.
 # 

@@ -114,14 +114,14 @@ class LSTM(nn.Module):
         return out
 
 
-# Instantiate RNN model
+# Instantiate RNN models
 lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
 
 # Set loss and optimizer function
 criterion = torch.nn.MSELoss()    # mean-squared error for regression
 optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
 
-# Train the model
+# Train the models
 for epoch in range(num_epochs):
     outputs = lstm(trainX)
     optimizer.zero_grad()
@@ -133,7 +133,7 @@ for epoch in range(num_epochs):
 
 print("Learning finished!")
 
-# Test the model
+# Test the models
 lstm.eval()
 test_predict = lstm(testX)
 

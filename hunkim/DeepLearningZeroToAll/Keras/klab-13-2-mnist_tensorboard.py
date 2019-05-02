@@ -54,7 +54,7 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 
 # ==============================================================================
-# build model
+# build models
 model = Sequential()
 
 model.add(Conv2D(nb_filters,

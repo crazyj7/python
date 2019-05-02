@@ -51,8 +51,8 @@ y_test= result[row:,-1]
 x_train.shape, y_train.shape
 x_test.shape, y_test.shape
 
-if not os.path.exists('lstmkeras.model') :
-    # build model
+if not os.path.exists('lstmkeras.models') :
+    # build models
     model = Sequential()
     model.add(LSTM(50, return_sequences=True, input_shape=(50,1)))
     model.add(LSTM(64, return_sequences=False))
@@ -66,9 +66,9 @@ if not os.path.exists('lstmkeras.model') :
               validation_data=(x_test, y_test),
               batch_size=10,
               epochs=20)
-    model.save('lstmkeras.model')
+    model.save('lstmkeras.models')
 else:
-    model = load_model('lstmkeras.model')
+    model = load_model('lstmkeras.models')
 
 pred = model.predict(x_test)
 print(y_test)

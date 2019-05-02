@@ -11,7 +11,7 @@ from gensim.models import word2vec
 datafile_enc="utf-8"
 datafile = "toji01.txt"             # text file book. (incuding puctuation, josa, eurmi)
 datafile_wakati = "toji01.wakati"     # just word (noun, verb)...
-datafile_model = 'toji.model'       # work2vec model
+datafile_model = 'toji.models'       # work2vec models
 
 # Parsing XML and make wakati.
 if False:
@@ -45,7 +45,7 @@ if False:
 
 
 # Word2Vec 모델 만들기 ---
-print('making word2vec model....')
+print('making word2vec models....')
 data = word2vec.LineSentence(datafile_wakati)
 model = word2vec.Word2Vec(data, 
     size=200, window=10, hs=1, min_count=2, sg=1)
@@ -53,7 +53,7 @@ model.save(datafile_model)
 print("ok")
 
 
-# test model
+# test models
 model1 = word2vec.Word2Vec.load(datafile_model)
 print('similar 땅=', model1.most_similar(positive=["땅"]))
 

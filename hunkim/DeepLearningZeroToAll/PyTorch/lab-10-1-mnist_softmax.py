@@ -28,14 +28,14 @@ data_loader = torch.utils.data.DataLoader(dataset=mnist_train,
                                           batch_size=batch_size,
                                           shuffle=True)
 
-# model
+# models
 model = torch.nn.Linear(784, 10, bias=True)
 
 # define cost/loss & optimizer
 criterion = torch.nn.CrossEntropyLoss()    # Softmax is internally computed.
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# train my model
+# train my models
 for epoch in range(training_epochs):
     avg_cost = 0
     total_batch = len(mnist_train) // batch_size
@@ -57,7 +57,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 X_test = Variable(mnist_test.test_data.view(-1, 28 * 28).float())
 Y_test = Variable(mnist_test.test_labels)
 

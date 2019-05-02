@@ -111,7 +111,7 @@ deconv_2_decoded = decoder_deconv_2(deconv_1_decoded)
 x_decoded_relu = decoder_deconv_3_upsamp(deconv_2_decoded)
 x_decoded_mean_squash = decoder_mean_squash(x_decoded_relu)
 
-# instantiate VAE model
+# instantiate VAE models
 vae = Model(x, x_decoded_mean_squash)
 
 # Compute VAE loss
@@ -141,7 +141,7 @@ vae.fit(x_train,
         batch_size=batch_size,
         validation_data=(x_test, None))
 
-# build a model to project inputs on the latent space
+# build a models to project inputs on the latent space
 encoder = Model(x, z_mean)
 
 # display a 2D plot of the digit classes in the latent space

@@ -101,20 +101,20 @@ sess = tf.Session()
 models = []
 num_models = 2
 for m in range(num_models):
-    models.append(Model(sess, "model" + str(m)))
+    models.append(Model(sess, "models" + str(m)))
 
 sess.run(tf.global_variables_initializer())
 
 print('Learning Started!')
 
-# train my model
+# train my models
 for epoch in range(training_epochs):
     avg_cost_list = np.zeros(len(models))
     total_batch = int(mnist.train.num_examples / batch_size)
     for i in range(total_batch):
         batch_xs, batch_ys = mnist.train.next_batch(batch_size)
 
-        # train each model
+        # train each models
         for m_idx, m in enumerate(models):
             c, _ = m.train(batch_xs, batch_ys)
             avg_cost_list[m_idx] += c / total_batch
@@ -123,7 +123,7 @@ for epoch in range(training_epochs):
 
 print('Learning Finished!')
 
-# Test model and check accuracy
+# Test models and check accuracy
 test_size = len(mnist.test.labels)
 predictions = np.zeros(test_size * 10).reshape(test_size, 10)
 for m_idx, m in enumerate(models):

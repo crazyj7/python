@@ -16,7 +16,7 @@ category = ['정치', '경제', '사회', 'IT', '과학', '자동차', '부동�
             '생활', '세계', '의학', '인테리어', '예술', '연예', '스포츠']
 
 filename='namu_test_article.txt'
-filename4 = './hub/namu.model'
+filename4 = './hub/namu.models'
 
 
 def make_DF(filename):
@@ -50,7 +50,7 @@ print('Model test')
 t1 = time.time()
 model = word2vec.Word2Vec.load(filename4)
 t2 = time.time()
-print('model load elapsed=', t2-t1)
+print('models load elapsed=', t2-t1)
 top20_dic=make_DF(filename)
 for ks in top20_dic.keys():
     print(ks, top20_dic[ks], end=" ,")

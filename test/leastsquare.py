@@ -9,7 +9,7 @@ print('x=',x)
 y=x*np.random.randn()*2 + np.random.rand(len(x))*3
 print('y=', y)
 
-# model : y = ax + b
+# models : y = ax + b
 mx = np.average(x)
 my = np.average(y)
 
