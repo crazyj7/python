@@ -22,13 +22,15 @@ y_val = np.load('dataset/y_val.npy').astype(np.float32)
 print(x_train.shape, y_train.shape)
 ## 1 = eye open, 0 = eye close.
 
-plt.subplot(2,1,1)
-plt.title(y_train[0])
-plt.imshow(x_train[0].reshape((26,34)), cmap='gray')
-plt.subplot(2,1,2)
-plt.title(y_train[1])
-plt.imshow(x_train[1].reshape((26,34)), cmap='gray')
-plt.show()
+if False:
+    plt.subplot(2,1,1)
+    plt.title(y_train[0])
+    plt.imshow(x_train[0].reshape((26,34)), cmap='gray')
+    plt.subplot(2,1,2)
+    plt.title(y_train[1])
+    plt.imshow(x_train[1].reshape((26,34)), cmap='gray')
+    plt.show()
+
 
 train_datagen = ImageDataGenerator(
     rescale=1./255,

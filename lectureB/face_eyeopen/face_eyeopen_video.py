@@ -2,13 +2,19 @@ import cv2, dlib
 import numpy as np
 from imutils import face_utils
 from keras.models import load_model
+import glob, os
 
 IMG_SIZE = (34, 26)
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('../MODELS/shape_predictor_68_face_landmarks.dat')
 
-model = load_model('models/20190501103342.h5')
+# mdoelfile = 'models/20190501103342.h5'
+filelist = glob.glob('models/*.h5')
+modelfile = max(filelist, key=os.path.getctime)
+print('modelfile=', modelfile)
+
+model = load_model(modelfile)
 model.summary()
 
 def crop_eye(img, eye_points):
