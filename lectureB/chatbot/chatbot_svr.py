@@ -1,11 +1,24 @@
+'''
+챗봇 서버
+>pip install python-telegram-bot --upgrade
+pip install emoji --upgrade
+
+@botfather
+'''
+
+
 
 from telegram.ext import Updater, MessageHandler, Filters
 
 from emoji import emojize
+
+
 from daum_top10 import getTop10Daum
 from weather01 import getWeather
 from news_realtime_daum import get_newsrealtime_daum
 from misemise import getmise
+
+
 
 apikey = '848818498:AAGvUjAKHoB4Qnl6AynzKeLpJNT6ed2dLkE'
 
