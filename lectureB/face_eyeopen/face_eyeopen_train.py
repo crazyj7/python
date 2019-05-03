@@ -56,6 +56,7 @@ val_generator = val_datagen.flow(
 )
 
 # model
+
 inputs = Input(shape=(26,34,1))
 
 net = Conv2D( 32, kernel_size=3, strides=1, padding='same', activation='relu') (inputs)
@@ -74,10 +75,10 @@ net = Activation('relu')(net)
 
 net = Dense(1)(net)
 outputs = Activation('sigmoid')(net)
-
 model = Model(inputs=inputs, outputs=outputs)
-
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])
+
+
 model.summary()
 
 # train
@@ -93,6 +94,6 @@ model.fit_generator(
     ]
 )
 
-# model.save('eye.h5')
+model.save('eye.h5')
 
 

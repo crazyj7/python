@@ -37,8 +37,8 @@ def crop_eye(img, eye_points):
   return eye_img, eye_rect
 
 # main
-# cap = cv2.VideoCapture('videos/2.mp4')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('videos/1.mp4')
+# cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
   ret, img_ori = cap.read()
@@ -74,8 +74,8 @@ while cap.isOpened():
     pred_r = model.predict(eye_input_r)
 
     # visualize
-    state_l = 'O %.1f' if pred_l > 0.1 else '- %.1f'
-    state_r = 'O %.1f' if pred_r > 0.1 else '- %.1f'
+    state_l = 'O %.1f' if pred_l > 0.5 else '- %.1f'
+    state_r = 'O %.1f' if pred_r > 0.5 else '- %.1f'
 
     state_l = state_l % pred_l
     state_r = state_r % pred_r
