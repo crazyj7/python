@@ -6,25 +6,29 @@ from bs4 import BeautifulSoup
 import urllib.request
 
 
-url = 'https://www.airkorea.or.kr/web/dustForecast?pMENU_NO=113'
+def getmise():
+    url = 'https://www.airkorea.or.kr/web/dustForecast?pMENU_NO=113'
 
-conn = urllib.request.urlopen(url)
-html = conn.read()
+    conn = urllib.request.urlopen(url)
+    html = conn.read()
 
-soup = BeautifulSoup(html, 'lxml')
+    soup = BeautifulSoup(html, 'lxml')
 
-dllist = soup.select("dl.forecast")
+    dllist = soup.select("dl.forecast")
 
-# today
-for i in range(2):
-    txt_dt =  dllist[i].select_one('dt').text
-    txt_status = dllist[i].select_one('.txtbox').text
-    print(txt_dt, txt_status)
+    # today
+    items=[]
+    for i in range(2):
+        item=dict()
+        item['day']=dllist[i].select_one('dt').text
+        item['content'] = dllist[i].select_one('.txtbox').text
+        items.append(item)  # today, tomorrow
+    return items
 
-
-
-
-
+if __name__ == '__main__':
+    items = getmise()
+    for item in items:
+        print(item['day'], item['content'])
 
 
 
