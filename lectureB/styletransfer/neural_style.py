@@ -1,11 +1,69 @@
 # Copyright (c) 2015-2018 Anish Athalye. Released under GPLv3.
 '''
+
+model file download; vgg
+https://www.youtube.com/redirect?redir_token=HqqImZMOwI4zY2yzCiTSugwCdUh8MTU1NzAxNTM2OUAxNTU2OTI4OTY5&q=http%3A%2F%2Fwww.vlfeat.org%2Fmatconvnet%2Fmodels%2Fimagenet-vgg-verydeep-19.mat&event=video_description&v=8nacYuqWHHI
+
+
 python neural_style.py --content <contentfile> --styles <stylefile> --output <outfile>
 
 --help ; 도움말.
-preservecolors option  ; 색상이 유지됨.
+--preserve-colors ; 색상이 유지됨.
 
 python neural_style.py --content examples/1-content.jpg --styles examples/1-style.jpg --output out.jpg
+
+
+usage: neural_style.py [-h] --content CONTENT --styles STYLE [STYLE ...]
+                       --output OUTPUT [--iterations ITERATIONS]
+                       [--print-iterations PRINT_ITERATIONS]
+                       [--checkpoint-output OUTPUT]
+                       [--checkpoint-iterations CHECKPOINT_ITERATIONS]
+                       [--progress-write] [--progress-plot] [--width WIDTH]
+                       [--style-scales STYLE_SCALE [STYLE_SCALE ...]]
+                       [--network VGG_PATH]
+                       [--content-weight-blend CONTENT_WEIGHT_BLEND]
+                       [--content-weight CONTENT_WEIGHT]
+                       [--style-weight STYLE_WEIGHT]
+                       [--style-layer-weight-exp STYLE_LAYER_WEIGHT_EXP]
+                       [--style-blend-weights STYLE_BLEND_WEIGHT [STYLE_BLEND_WEIGHT ...]]
+                       [--tv-weight TV_WEIGHT] [--learning-rate LEARNING_RATE]
+                       [--beta1 BETA1] [--beta2 BETA2] [--eps EPSILON]
+                       [--initial INITIAL]
+                       [--initial-noiseblend INITIAL_NOISEBLEND]
+                       [--preserve-colors] [--pooling POOLING] [--overwrite]
+neural_style.py: error: the following arguments are required: --content, --styles, --output
+
+
+
+
+ex) iteration 디폴트는 1000.
+# 고흐
+python neural_style.py --content test.jpg --styles examples/1-style.jpg --output out1.jpg --overwrite
+
+# 피카소
+python neural_style.py --content test.jpg --styles examples/2-style1.jpg --output out2.jpg --overwrite
+
+# test
+>python neural_style.py --content img10.jpg --styles styles/mone8.jpg --output out5.jpg --checkpoint-output "outputs_%d.jpg" --checkpoint-itera
+tions 500 --style-weight 0.2
+
+
+>python neural_style.py --content img10.jpg --styles styles/mone8.jpg --output out5.jpg --checkpoint-output "outputs_%d.jpg" --checkpoint-iterations 200 --content-weight-blend 0.5 --overwrite
+
+>python neural_style.py --content img16.jpg --styles styles/mone8.jpg --output out7.jpg --checkpoint-output "outputs7_%d.jpg" --iterations 3000 --checkpoint-iterations 300 --content-weight-blend 0.8 --overwrite
+python neural_style.py --preserve-colors  --content img16.jpg --styles styles/mone8.jpg --output out7.jpg --checkpoint-output "outputs7_%d.jpg" --iterations 3000 --checkpoint-iterations 300 --content-weight-blend 0.8 --overwrite
+
+python neural_style.py --preserve-colors  --content img9.jpg --styles styles/mone10.jpg --output out8.jpg --checkpoint-output "outputs8_%d.jpg" --iterations 3000 --checkpoint-iterations 300 --content-weight-blend 0.2 --overwrite
+
+python neural_style.py --preserve-colors  --content img9.jpg --styles styles/mone10.jpg --output out9.jpg --checkpoint-output "outputs9_%d.jpg" --iterations 1200 --checkpoint-iterations 300 --content-weight-blend 0.8 --overwrite
+
+사진에 가까움.
+python neural_style.py --content img9.jpg --styles styles/mone10.jpg --output out10.jpg --checkpoint-output "outputs10_%d.jpg" --iterations 900 --checkpoint-iterations 300 --overwrite --content-weight 0.2 --style-weight 0.8
+
+python neural_style.py --content img9.jpg --styles styles/mone10.jpg --output out11.jpg --checkpoint-output "outputs11_%d.jpg" --iterations 900 --checkpoint-iterations 300 --overwrite --content-weight 0.8 --style-weight 0.2
+
+python neural_style.py --content img9.jpg --styles styles/mone10.jpg --output out12.jpg --checkpoint-output "outputs12_%d.jpg" --iterations 600 --checkpoint-iterations 300
+
 
 '''
 
@@ -22,6 +80,10 @@ import scipy.misc
 
 from stylize import stylize
 
+import tensorflow as tf
+
+
+tf.device('gpu:0')
 
 # default arguments
 CONTENT_WEIGHT = 5e0
