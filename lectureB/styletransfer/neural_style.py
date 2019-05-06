@@ -4,8 +4,10 @@
 model file download; vgg
 https://www.youtube.com/redirect?redir_token=HqqImZMOwI4zY2yzCiTSugwCdUh8MTU1NzAxNTM2OUAxNTU2OTI4OTY5&q=http%3A%2F%2Fwww.vlfeat.org%2Fmatconvnet%2Fmodels%2Fimagenet-vgg-verydeep-19.mat&event=video_description&v=8nacYuqWHHI
 
-
 python neural_style.py --content <contentfile> --styles <stylefile> --output <outfile>
+
+ex example)
+python neural_style.py --content ./examples/1-content.jpg --styles examples/1-style.jpg --output out1.jpg --overwrite
 
 --help ; 도움말.
 --preserve-colors ; 색상이 유지됨.
@@ -97,7 +99,7 @@ BETA2 = 0.999
 EPSILON = 1e-08
 STYLE_SCALE = 1.0
 ITERATIONS = 1000
-VGG_PATH = 'imagenet-vgg-verydeep-19.mat'
+VGG_PATH = '../MODELS/imagenet-vgg-verydeep-19.mat'
 POOLING = 'max'
 
 
