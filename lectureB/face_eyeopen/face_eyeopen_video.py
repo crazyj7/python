@@ -37,11 +37,12 @@ def crop_eye(img, eye_points):
   return eye_img, eye_rect
 
 # main
-# cap = cv2.VideoCapture('videos/1.mp4')
+# cap = cv2.VideoCapture('video/1.mp4')
 cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
   ret, img_ori = cap.read()
+  img_ori = cv2.flip(img_ori, 1)   # 좌우 반전 (전면카메라)
 
   if not ret:
     break
@@ -74,24 +75,25 @@ while cap.isOpened():
     pred_r = model.predict(eye_input_r)
 
     # visualize
-    state_l = 'O %.1f' if pred_l > 0.5 else '- %.1f'
-    state_r = 'O %.1f' if pred_r > 0.5 else '- %.1f'
+    state_l = 'O %.1f' if pred_l > 0.1 else '- %.1f'
+    state_r = 'O %.1f' if pred_r > 0.1 else '- %.1f'
 
     state_l = state_l % pred_l
     state_r = state_r % pred_r
 
     color=(255,255,255)
-    if pred_l<0.5:
+    if pred_l<0.1:
       color=(0,0,255)
-    cv2.rectangle(img, pt1=tuple(eye_rect_l[0:2]), pt2=tuple(eye_rect_l[2:4]), color=color, thickness=2)
+    cv2.rectangle(img, pt1=tuple(eye_rect_l[0:2]), pt2=tuple(eye_rect_l[2:4]), color=color, thickness=1)
     color=(255,255,255)
-    if pred_r<0.5:
+    if pred_r<0.1:
       color=(0,0,255)
-    cv2.rectangle(img, pt1=tuple(eye_rect_r[0:2]), pt2=tuple(eye_rect_r[2:4]), color=color, thickness=2)
+    cv2.rectangle(img, pt1=tuple(eye_rect_r[0:2]), pt2=tuple(eye_rect_r[2:4]), color=color, thickness=1)
 
     cv2.putText(img, state_l, tuple(eye_rect_l[0:2]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)
     cv2.putText(img, state_r, tuple(eye_rect_r[0:2]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)
 
+  img=cv2.resize(img, (img.shape[1]*2, img.shape[0]*2))
   cv2.imshow('result', img)
   if cv2.waitKey(1) == ord('q'):
     break

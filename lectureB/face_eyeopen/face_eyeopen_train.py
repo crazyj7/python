@@ -62,10 +62,10 @@ inputs = Input(shape=(26,34,1))
 net = Conv2D( 32, kernel_size=3, strides=1, padding='same', activation='relu') (inputs)
 net = MaxPooling2D(pool_size=2)(net)
 
-net = Conv2D( 64, kernel_size=3, strides=1, padding='same', activation='relu') (inputs)
+net = Conv2D( 64, kernel_size=3, strides=1, padding='same', activation='relu') (net)
 net = MaxPooling2D(pool_size=2)(net)
 
-net = Conv2D( 128, kernel_size=3, strides=1, padding='same', activation='relu') (inputs)
+net = Conv2D( 128, kernel_size=3, strides=1, padding='same', activation='relu') (net)
 net = MaxPooling2D(pool_size=2)(net)
 
 net = Flatten()(net)
