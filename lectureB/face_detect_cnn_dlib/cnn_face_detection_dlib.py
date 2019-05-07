@@ -1,6 +1,10 @@
 '''
 CNN face detection dlib
 
+cv haar , cv dnn(good)
+dlib hog, dlib mmod(slow)
+
+
 ex)
 python cnn_face_detection_dlib -i [image]
 '''
@@ -24,8 +28,9 @@ if False:   # debug
                     help='path to weights file')
     args = ap.parse_args()
 else:
-    args.weights = "../MODELS/mmod_human_face_detector.dat"
-    args.image = "girlgroup04.jpg"
+    args.weights = "../MODELS/mmod_human_face_detector.dat"     # for cnn detect
+    # args.image = "girlgroup04.jpg"
+    args.image = "girlgroup01.jpg"
 
 print("args.weights=", args.weigths)
 print("args.image=", args.image)
