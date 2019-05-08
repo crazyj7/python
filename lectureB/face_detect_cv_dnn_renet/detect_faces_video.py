@@ -1,5 +1,12 @@
 # USAGE
 # python detect_faces_video.py --prototxt deploy.prototxt.txt --model res10_300x300_ssd_iter_140000.caffemodel
+# 더 많이 잡으러면 --confidence 0.4  등 0.2 낮추면 된다.
+# 그러나 FA가 많아짐...
+# 얼굴도 잡고, 얼굴안에 눈도 잡히는 현상도 생김...
+#
+# 속도도 빠르고, 얼굴 여러 각도도 인식, 얼굴 일부도 인식함. 인식률도 좋다.
+# 단점은 FA가 있을 수도...
+#
 
 # import the necessary packages
 from imutils.video import VideoStream
