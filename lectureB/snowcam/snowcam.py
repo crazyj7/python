@@ -67,6 +67,8 @@ while True:
     ret, img = cap.read()
     if not ret:
         break
+    # 이미지 좌우 반전.
+    img = cv2.flip(img, 1)
     img = cv2.resize(img, (int(img.shape[1]*scaler), int(img.shape[0]*scaler)))
     ori = img.copy()
     result = ori

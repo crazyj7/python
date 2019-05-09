@@ -77,7 +77,7 @@ while True:
 		cv2.putText(frame, text, (startX, y),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
-	# show the output frame
+		# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
  
