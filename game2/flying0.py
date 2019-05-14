@@ -149,23 +149,23 @@ def initGame():
     gamepad = pygame.display.set_mode((pad_width, pad_height))
     pygame.display.set_caption('PyFlying')
 
-    aircraft = pygame.image.load('plane.png')
+    aircraft = pygame.image.load('res/plane.png')
 
     aircraft_width = aircraft.get_width()
     aircraft_height = aircraft.get_height()
     print('aircraft size=', aircraft_width, aircraft_height)
 
-    background1 = pygame.image.load('back2.png')
+    background1 = pygame.image.load('res/back2.png')
     background2 = background1.copy()
 
-    bat = pygame.image.load('bat.png')
+    bat = pygame.image.load('res/bat.png')
 
-    fires.append(pygame.image.load('fireball.png'))
-    fires.append(pygame.image.load('fireball2.png'))
+    fires.append(pygame.image.load('res/fireball.png'))
+    fires.append(pygame.image.load('res/fireball2.png'))
     for i in range(5):
         fires.append(None)
 
-    bullet = pygame.image.load('bullet.png')
+    bullet = pygame.image.load('res/bullet.png')
 
     clock = pygame.time.Clock()
     runGame()

@@ -232,37 +232,37 @@ def initGame():
 
     pygame.init()
 
-    sound_shot = pygame.mixer.Sound('shot.wav')
-    sound_explosion = pygame.mixer.Sound('explosion.wav')
+    sound_shot = pygame.mixer.Sound('res/shot.wav')
+    sound_explosion = pygame.mixer.Sound('res/explosion.wav')
 
     gamepad = pygame.display.set_mode((pad_width, pad_height))
     pygame.display.set_caption('PyFlying')
 
-    aircraft = pygame.image.load('plane.png').convert_alpha()
+    aircraft = pygame.image.load('res/plane.png').convert_alpha()
 
     aircraft_width = aircraft.get_width()
     aircraft_height = aircraft.get_height()
     print('aircraft size=', aircraft_width, aircraft_height)
 
-    background1 = pygame.image.load('back2.png').convert_alpha()
+    background1 = pygame.image.load('res/back2.png').convert_alpha()
     background2 = background1.copy()
 
-    bat = pygame.image.load('bat.png').convert_alpha()
+    bat = pygame.image.load('res/bat.png').convert_alpha()
     bat_height = bat.get_height()
     bat_width = bat.get_width()
 
-    fire1 = pygame.image.load('fireball.png').convert_alpha()
+    fire1 = pygame.image.load('res/fireball.png').convert_alpha()
     fire_width = fire1.get_width()
     fire_height = fire1.get_height()
     fires.append(fire1)
-    fires.append(pygame.image.load('fireball2.png'))
+    fires.append(pygame.image.load('res/fireball2.png'))
 
     for i in range(5):
         fires.append(None)
 
-    bullet = pygame.image.load('bullet.png').convert_alpha()
+    bullet = pygame.image.load('res/bullet.png').convert_alpha()
 
-    boom = pygame.image.load('boom.png').convert_alpha()
+    boom = pygame.image.load('res/boom.png').convert_alpha()
 
     # background music
     # pygame.mixer.music.load('mybgm.wav')

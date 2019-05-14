@@ -25,6 +25,7 @@ class SleepDetector:
     def play(self):
         if SleepDetector.lastplay + SleepDetector.playdur > time.time() :
             return
+        mixer.music.stop()
         print('!!!PLAY!!!')
         SleepDetector.lastplay = time.time()
         mixer.music.play(0, 0)      # async play

@@ -2,6 +2,13 @@
 import cv2
 import numpy as np
 
+img1 = cv2.imread('back2.png', cv2.IMREAD_UNCHANGED)
+img2 = np.concatenate( [img1, img1], axis=1 )   # 옆으로 붙임.
+print(img1.shape)
+print(img2.shape)
+cv2.imwrite('back2_sp.png', img2)
+exit()
+
 
 img1 = cv2.imread('fireball.png', cv2.IMREAD_UNCHANGED)
 img2 = cv2.imread('fireball2.png', cv2.IMREAD_UNCHANGED)

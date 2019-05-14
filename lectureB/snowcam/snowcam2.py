@@ -120,8 +120,8 @@ cap = cv2.VideoCapture(0)
 # scaler = 0.3
 # cap = cv2.VideoCapture('Slow Motion Video Of People.mp4')
 
-# overlay = cv2.imread('ryan_transparent.png', cv2.IMREAD_UNCHANGED)
-overlay = cv2.imread('head6.png', cv2.IMREAD_UNCHANGED)
+overlay = cv2.imread('ryan_transparent.png', cv2.IMREAD_UNCHANGED)
+# overlay = cv2.imread('head6.png', cv2.IMREAD_UNCHANGED)
 if overlay.shape[2] == 3:
     overlay = cv2.cvtColor(overlay, cv2.COLOR_BGR2BGRA)
 
