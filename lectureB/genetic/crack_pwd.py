@@ -6,12 +6,14 @@ min_len = 2
 max_len = 10
 # 엄마도 기억력의 한계가 있어서 비밀번호의 최대, 최소 자릿수를 지정해놓았다
 
+# length 길이 만큼의 랜덤 스트링 생성.
 def generate_word(length):
     result = ''
     x = ''.join(random.sample(string.ascii_letters + string.digits, k=length))
     return x
 
 # 옛날 옛적 빵형이 지구에 빛이 있으라하여 첫번째 세대가 태어났다
+# 길이 범위에 해당되는 랜덤 스트링 패스워드를 size 개수만큼 만들어 리스트로 리턴. (스트링 리스트)
 def generate_population(size, min_len, max_len):
     population = []
     for i in range(size):
@@ -25,44 +27,47 @@ pop = generate_population(size=100, min_len=min_len, max_len=max_len)
 pop
 
 
+# 패스워드에 대한 평가 모듈.
+# 길이가 틀리면 0점.
+# 길이가 맞으면 일단 0.5점 추가, 자리에 맞는 문자가 있으면 1점씩 추가하여 나온 값을
+# 백분율 스코어화 한다.
 def fitness(password, test_word):
     score = 0
-
     if len(password) != len(test_word):
         return score
-
     # if fit length, I'll give you score 0.5
     len_score = 0.5
     score += len_score
-
     for i in range(len(password)):
         if password[i] == test_word[i]:
             score += 1
-
     # 백점 만점에 몇점?
     return score / (len(password) + len_score) * 100
 
 
 fitness('abcde', 'abcde')
 
-
+# 유전자들을 평가.
+# 우성인자들 우선순위로 정렬. 유추한 정답패스워드 길이 리턴.
 def compute_performace(population, password):
     performance_list = []
     for individual in population:
         score = fitness(password, individual)
-
         # we can predict length of password
         if score > 0:
             pred_len = len(individual)
         performance_list.append([individual, score])
-
     population_sorted = sorted(performance_list, key=lambda x: x[1], reverse=True)
     return population_sorted, pred_len
 
-
+# 다음 세대로 진화한다.
+# param ; 우성으로 정렬된 유전자, 선택할 topN, 랜덤선택개수, 패스워드 길이.
+# 다음 세대에서는 기존세대에서 우성인자들 N개를 추가하고, 랜덤하게 몇 개를 추가한다.
+# 개수가 모자라면 랜덤하게 채움.
 def select_survivors(population_sorted, best_sample, lucky_few, password_len):
     next_generation = []
 
+    # population의 index 0은 teststring, 1은 score.
     for i in range(best_sample):
         if population_sorted[i][1] > 0:
             next_generation.append(population_sorted[i][0])
@@ -86,7 +91,9 @@ print('Password length must be %s' % pred_len)
 print('survivors=', survivors)
 
 
-
+# 차일드 생성
+# 둘 중 짧은 길이를 선택.
+# 패스워드 문자를 둘 중 하나씩 랜덤하게 선택.
 def create_child(individual1, individual2):
     child = ''
     min_len_ind = min(len(individual1), len(individual2))
@@ -109,7 +116,8 @@ children = create_children(survivors, 5)
 
 print('children=', children)
 
-
+# 패스워드에 노이즈를 추가.
+# 임의의 자리에 문자를 랜덤하게 설정한다.
 def mutate_word(word):
     idx = int(random.random() * len(word))
     if (idx == 0):
@@ -118,6 +126,7 @@ def mutate_word(word):
         word = word[:idx] + random.choice(string.ascii_letters + string.digits) + word[idx+1:]
     return word
 
+# 돌연변이를 생성시킨다. 주어집 비율 만큼 랜덤하게 생성. (change_of_muataion은 백분율%)
 def mutate_population(population, chance_of_mutation):
     for i in range(len(population)):
         if random.random() * 100 < chance_of_mutation:
