@@ -1,3 +1,10 @@
+'''
+sudo apt-get install python-opencv
+pip install opencv-contrib-python
+
+'''
+
+
 import numpy as np
 import cv2
 
