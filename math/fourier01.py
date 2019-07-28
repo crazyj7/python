@@ -18,16 +18,29 @@ from matplotlib import pyplot as plt
 
 
 img = cv2.imread('you2.jpg')
-b,g,r = cv2.split(img)
-img = cv2.merge([r,g,b])
+# b,g,r = cv2.split(img)
+# img = cv2.merge([r,g,b])
+# print('img shape=', img.shape)
 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+print('img shape=', img.shape)
+
 """
 # Fourier Transform을 적용.
  적용을 하면 0,0, 즉 화면 좌측상단점이 중심이고, 거기에 저주파가 모여 있음.
  분석을 용이하게 하기 위해 0,0을 이미지의 중심으로 이동 시키고 Log Scaling을 하여 분석이 용이한 결과값으로 변환
 """
 f = np.fft.fft2(img) # 이미지에 푸리에 변환 적용
+print(type(f))
+print('f shape=', f.shape)
+
+# plt.figure()
+# plt.imshow(f)
+# plt.show()
+
+print('f=', f)
 fshift = np.fft.fftshift(f) #분석을 용이하게 하기 위해 주파수가 0인 부분을 중앙에 위치시킴. 중앙에 저주파가 모이게 됨.
+print('fshift=', fshift)
 magnitude_spectrum = 20*np.log(np.abs(fshift)) #spectrum 구하는 수학식.
 
 rows, cols = img.shape
@@ -37,6 +50,8 @@ crow, ccol = int(rows/2), int(cols/2)  # 이미지의 중심 좌표
 # 저주파를 제거하였기 때문에 배경이 사라지고 경계선만 남게 됨.
 d = 10
 fshift[crow-d:crow+d, ccol-d:ccol+d] = 1
+print('fshift remove center area(low) freq.')
+print(fshift)
 
 #푸리에 변환결과를 다시 이미지로 변환
 f_ishift = np.fft.ifftshift(fshift)
