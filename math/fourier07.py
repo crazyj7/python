@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+
 Fs = 2000                    # Sampling frequency
 T = 1/Fs                     # Sample interval time
 te= 0.5                     # End of time
