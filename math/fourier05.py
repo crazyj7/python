@@ -1,4 +1,5 @@
 '''
+fast fft
 scipy fftpack
 '''
 
@@ -58,7 +59,7 @@ if True:
 
     plt.show()
 
-    
+
 
 
 

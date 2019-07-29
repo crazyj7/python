@@ -20,14 +20,14 @@ y = y1 + y2
 
 dct_type=2
 yf2 = dct(y, dct_type, N)
-
-plt.subplot(311)
-plt.stem(np.real(yf))
-plt.title("DFT 실수부")
-
-plt.subplot(312)
-plt.stem(np.imag(yf))
-plt.title("DFT 허수부")
+#
+# plt.subplot(311)
+# plt.stem(np.real(yf))
+# plt.title("DFT 실수부")
+#
+# plt.subplot(312)
+# plt.stem(np.imag(yf))
+# plt.title("DFT 허수부")
 
 plt.subplot(313)
 plt.stem(np.abs(yf2))

@@ -9,11 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 fmax=1000  # 찾을 최대 주파수
-dt = 1/fmax     # 샘플링 시간
-N = 2000      # 샘플 개수
+dt = 1/fmax     # 샘플링 주기. 0.001 sec.
+N = fmax      # 샘플 개수. 샘플링 시간 0~1sec.
 
 # 샘플 시각
-t = np.arange(0, N)*dt
+t = np.arange(0, N)*dt  # 0~2초를 균일하게 2000개로 나눔.
 # original signal ; 60Hz, 120Hz 사용.
 s = 0.8*np.sin(2*np.pi*80*t)-0.4*np.cos(2*np.pi*80*t)\
     +0.3*np.sin(2*np.pi*250*t)+0.3*np.cos(2*np.pi*250*t)
