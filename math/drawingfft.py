@@ -56,7 +56,7 @@ def parse_signdata(snsign, breversey=True):
 
 
 sign = parse_signdata(pts)
-sign = np.asarray(sign)[0]
+sign = np.asarray(sign)[0]  # first drawing (1 count)
 
 signmin = np.min(sign, axis=0)
 # zero-base. positive number
@@ -72,7 +72,7 @@ sign[:,0] -= 1
 sign[:,1] -= 1
 
 
-print('sign=',sign)
+# print('sign=',sign)
 print(sign.shape)
 
 
@@ -95,16 +95,73 @@ plt.subplot(ph,pw,pi)
 plt.title('t-y')
 plt.plot(sign[:,2], sign[:,1])
 
+def get_len(v1,v2):
+    partlen = np.sqrt((v2[0] - v1[0])**2 + (v2[1]-v1[1])**2)
+    return partlen
 
 
-def my_fft(orgt, val):
+def get_length(vec):
+    '''
+    get the length of the line points
+    :param vec: [x,y,..][x,y,..]
+    :return: length
+    '''
+    if vec.ndim>1:
+        startx = vec[:-1,0]
+        endx = vec[1:,0]
+        starty = vec[:-1,1]
+        endy = vec[1:,1]
+    else:
+        startx = vec[:-1]
+        endx = vec[1:]
+        starty = np.zeros(len(vec)-1)
+        endy = starty
+    # print('cnt=', len(startx), len(endx))
+    partlen = np.sqrt((endx - startx)**2 + (endy-starty)**2)
+    return np.sum(partlen)
+
+
+N = 1000    # sample count (extended)
+fs = 1000   # sampling frequency
+T = 1/fs
+
+def my_fft(orgt, val, extracnt):
     global pi
-    N = 1000    # sample count (extended)
-    fs = 1000   # sampling frequency
-    T = 1/fs
     spl = splrep(orgt, val)
     newt = np.linspace(0,1,N)
     newval = splev(newt, spl)
+
+    # print('newval=', newval)
+    # 전체 드로잉 길이
+    totallen = get_length(newval)
+    # 포인트당 평균 이동 길이
+    lenpt = totallen/N
+    print('totallen=', totallen, 'len/ptcnt=', lenpt)
+
+    ## gibb's pheonomenum problem...
+    # remove first and last some part??? and save it aside?...
+    # or add extra link from end point to start point.
+    #  remove extra time.
+    lastt = newt[-1]
+    lastv = newval[-1]
+    dt = newt[1]-newt[0]
+    endtostartlen = newval[0] - newval[-1]
+    dl = endtostartlen / extracnt
+    print('lastv=', lastv, 'startv=', newval[0])
+    print('newval cnt=', len(newval))
+    print('extracnt = ', extracnt, 'dt=',dt,'dl=', dl)
+    addt = []
+    addv = []
+    for i in range(extracnt):
+        addt.append(lastt+(i+1)*dt)
+        addv.append(lastv+(i+1)*dl)
+    addt = np.asarray(addt)
+    addv = np.asarray(addv)
+    # print(addt)
+    # print(addv)
+    newt = np.r_[newt, addt]
+    newval = np.r_[newval, addv]
+    print(newt.shape, newval.shape)
 
     # same shape. but more detail... sampling..
     if False:
@@ -113,7 +170,7 @@ def my_fft(orgt, val):
         plt.plot(newt, newval)
 
     # fft
-    nfft=N  # 2'power but. python process this in backend automatically. so no need.
+    nfft=N+extracnt  # 2'power but. python process this in backend automatically. so no need.
     k = np.arange(nfft)
     f = k*fs/nfft      # frequency sample. (sample count)
     f0 = f[range(math.trunc(nfft/2))]      # only half size check for get hz.
@@ -139,7 +196,7 @@ def my_fft(orgt, val):
         print('freq=', f0[idxy[i]], 'amp=', y[idxy[i]], 'angle=', phase[idxy[i]])
 
     # recover
-    newy = np.zeros((N,))
+    newy = np.zeros((nfft,))
     for i in range(topn):
         freq = f0[idxy[i]]
         yx = y[idxy[i]]
@@ -154,24 +211,32 @@ def my_fft(orgt, val):
     plt.plot(newt, newval)
     plt.plot(newt, newy)
 
-    ## gibb's pheonomenum problem...
-    # remove first and last some part??? and save it aside?...
-
     return newt, newy, newval, freq, coec, coes
 
 
 # t, val
-newt, newx, oldx, freq, coec, coes = my_fft(sign[:,2], sign[:,0])
-newt, newy, oldy, freq, coec, coes = my_fft(sign[:,2], sign[:,1])
+shapelen = get_length(sign)
+print('shapelen=', shapelen)
+dl = shapelen/N
+endtostartlen = get_len([sign[-1,0], sign[-1,1]], [sign[0,0], sign[0,1]])
+print('endtostartlen=', endtostartlen)
+extracnt = int(endtostartlen/dl)
+print('extracnt=', extracnt)
+
+
+newt, newx, oldx, freq, coec, coes = my_fft(sign[:,2], sign[:,0], extracnt)
+newt, newy, oldy, freq, coec, coes = my_fft(sign[:,2], sign[:,1], extracnt)
 
 pi+=1
 plt.subplot(ph, pw, pi)
-plt.plot(oldx, oldy)
-plt.scatter(oldx[0], oldy[0], c='r')
-plt.scatter(oldx[-1], oldy[-1], c='b')
-plt.plot(newx, newy)
-plt.scatter(newx[0], newy[0], c='r')
-plt.scatter(newx[-1], newy[-1], c='b')
+plt.plot(sign[:,0], sign[:,1])
+
+
+pi+=1
+plt.subplot(ph, pw, pi)
+plt.plot(newx[:-extracnt], newy[:-extracnt])
+# plt.scatter(newx[0], newy[0], c='r')
+# plt.scatter(newx[-1], newy[-1], c='b')
 
 plt.show()
 
