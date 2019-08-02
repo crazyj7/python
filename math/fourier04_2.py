@@ -8,9 +8,10 @@ sin, cos으로 구성된 신호, 주파수와 진폭을 어떻게 구하는가.
 import numpy as np
 import matplotlib.pyplot as plt
 
-fmax=1000  # 찾을 최대 주파수
+
+fmax=1000       # 찾을 최대 주파수
 dt = 1/fmax     # 샘플링 주기. 0.001 sec.
-N = fmax      # 샘플 개수. 샘플링 시간 0~1sec.
+N = fmax        # 샘플 개수.
 
 # 샘플 시각
 t = np.arange(0, N)*dt  # 0~2초를 균일하게 2000개로 나눔.
@@ -69,6 +70,7 @@ for i in range(3):
     # imagine은 sin 인데, 부호는 반대로 한다.
     amp2 = amp2 * -1
     yf += amp1*np.cos(2*np.pi*freq*t)+amp2*np.sin(2*np.pi*freq*t)
+
 plt.plot(t[0:200], s[0:200], label='signal')
 plt.plot(t[0:200], yf[0:200], label='fft')
 plt.legend()

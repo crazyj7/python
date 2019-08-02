@@ -7,7 +7,7 @@ drawing to fft
 import numpy as np
 import matplotlib.pyplot as plt
 
-from scipy.interpolate import splrep, spleval, splev
+from scipy.interpolate import splrep, splev
 
 # fmax=dt*cnt  # 찾을 최대 주파수
 fmax= 1024
@@ -55,21 +55,7 @@ def make_drawing():
     y1 /= np.max(y1)
     return t1, x1, y1
 
-t, x, y = make_drawing()
 
-
-# 그림.
-if False:
-    plt.figure()
-    # plt.plot(t, x)
-    plt.plot(x, y)
-    plt.show()
-
-# x축만 분리하여 그래프.
-if False:
-    plt.figure()
-    plt.plot(t, x)
-    plt.show()
 
 
 def predict(t, x):
@@ -138,9 +124,32 @@ def predict(t, x):
     plt.show()
     return yf
 
-px = predict(t,x)
-py = predict(t,y)
 
+###################################################################################
+
+t, x, y = make_drawing()
+# np.set_printoptions(threshold=np.inf)
+print(t)
+print(x)
+print(y)
+
+
+# 그림.
+if False:
+    plt.figure()
+    # plt.plot(t, x)
+    plt.plot(x, y)
+    plt.show()
+
+# x축만 분리하여 그래프.
+if False:
+    plt.figure()
+    plt.plot(t, x)
+    plt.show()
+
+px = predict(t,x)
+
+py = predict(t,y)
 
 # 그림.
 if True:
