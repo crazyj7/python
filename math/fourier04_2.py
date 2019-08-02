@@ -33,7 +33,7 @@ plt.xlabel('time'), plt.ylabel('x(t)'), plt.grid()
 # fourier spectrum...
 df = fmax/N
 f = np.arange(0,N)*df   # 1Hz 2Hz, ... ,fmax Hz.
-xf = np.fft.fft(x)*dt
+xf = np.fft.fft(x)/N
 
 plt.subplot(3,1,2)
 cnt = fmax
@@ -47,11 +47,11 @@ plt.xlabel('freq(Hz)'), plt.ylabel('abs(xf)'), plt.grid()
 print('f=', f)
 xf2 = np.abs(xf[0:cnt])
 # print('xf2=', xf2)
-print('xf mean=', np.mean(xf2))
+# print('xf mean=', np.mean(xf2))
 # print('sort=', -np.sort(-xf2))
 rankidx = np.argsort(-xf2)
 # print(rankidx)
-for i in range(3):
+for i in range(4):
     # print(i, rank[i])
     print(f[rankidx[i]], xf2[rankidx[i]])
 
@@ -59,7 +59,7 @@ for i in range(3):
 plt.subplot(3,1,3)
 # t 0~200
 yf = np.zeros((N,))
-for i in range(3):
+for i in range(4):
     freq = f[rankidx[i]]
     amp = xf2[rankidx[i]]
     print('freq, and amp = ', freq, amp, xf[rankidx[i]])
