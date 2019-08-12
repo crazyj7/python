@@ -3,7 +3,7 @@
 
 # # Car Classify
 
-# In[47]:
+# In[1]:
 
 
 import numpy as np
@@ -20,7 +20,7 @@ import seaborn as sns
 # pandas dataframe
 # dfclass, dftrain, dftest
 
-# In[48]:
+# In[2]:
 
 
 basedir = './'
@@ -29,13 +29,13 @@ basedir = './'
 dfclass = pd.read_csv(basedir+'class.csv')
 
 
-# In[49]:
+# In[3]:
 
 
 dfclass.head()
 
 
-# In[50]:
+# In[4]:
 
 
 # 테스트 데이터 읽기  
@@ -43,7 +43,7 @@ dftest = pd.read_csv(basedir+'test.csv')
 dftest.head()
 
 
-# In[51]:
+# In[5]:
 
 
 # 훈련 데이터 읽기  
@@ -53,20 +53,20 @@ dftrain['class']=dftrain['class']-1  # make class [0,195] from [1,196]
 dftrain.describe()
 
 
-# In[52]:
+# In[6]:
 
 
 # shape 형상, 개수 확인   
 dftrain.shape, dftest.shape, dfclass.shape
 
 
-# In[53]:
+# In[7]:
 
 
 print(dftrain.count(), dftest.count(), dfclass.count())
 
 
-# In[54]:
+# In[8]:
 
 
 # 빠진 파일 확인 
@@ -75,7 +75,7 @@ for f in dftest.img_file:
         print('not found:', f)
 
 
-# In[55]:
+# In[9]:
 
 
 for f in dftrain.img_file:
@@ -83,7 +83,7 @@ for f in dftrain.img_file:
         print('not found:', f)
 
 
-# In[56]:
+# In[10]:
 
 
 # 클래스별로 개수를 보기. 균일하게 존재하는지 확인.
@@ -92,7 +92,7 @@ for f in dftrain.img_file:
 sns.countplot(dftrain["class"], order=dftrain["class"].value_counts(ascending=True).index)
 
 
-# In[57]:
+# In[11]:
 
 
 # 개수 확인하는 다른 방법. 오름 차순 정렬. 
@@ -101,7 +101,7 @@ sns.countplot(dftrain["class"], order=dftrain["class"].value_counts(ascending=Tr
 
 # ## image view
 
-# In[58]:
+# In[12]:
 
 
 # 이미지 파일 보기 
@@ -118,7 +118,7 @@ for i in range(3):
     print(img.shape)
 
 
-# In[59]:
+# In[13]:
 
 
 # 크기가 제각각인 이미지. 리사이즈.
@@ -140,7 +140,7 @@ for i in range(3):
     print(img_r.shape)
 
 
-# In[60]:
+# In[14]:
 
 
 # 바인딩 박스 정보 확인. test
@@ -152,7 +152,7 @@ print(bb)
 
 # ## bounding box
 
-# In[61]:
+# In[15]:
 
 
 # 이미지에 박스 그리기 
@@ -164,7 +164,7 @@ def bound(img, x1,y1,x2,y2):
     return img
 
 
-# In[62]:
+# In[16]:
 
 
 img2 = np.copy(img)
@@ -172,7 +172,7 @@ img2=bound(img2, bb[0], bb[1], bb[2], bb[3])
 plt.imshow(img2)
 
 
-# In[63]:
+# In[17]:
 
 
 # 바인딩 박스가 이미지 리사이즈시 새로운 박스 위치를 찾기
@@ -186,7 +186,7 @@ bb2=resize_bb(bb, img.shape[1], img.shape[0])
 print(bb, bb2)
 
 
-# In[64]:
+# In[18]:
 
 
 img2 = np.copy(img_r)
@@ -199,40 +199,65 @@ plt.imshow(img2)
 # image (224,224,3) shape. 3 channels. crop box area.
 # 
 
-# In[65]:
+# In[27]:
 
 
 # 이미지를 바인딩 박스만 추출하여 리사이즈 한다. (차만 보이게 추출하고 리사이즈)
 ''' crop and resize '''
-def prepro_img(imgpath, bb):
+def prepro_img(imgpath, bb=None, margin=20, size=(224,224)):
     img = Image.open(imgpath)
     img = img.convert('RGB')  # 3 channel image.
-#     img = img.convert('L')  # 1 channel gray scale -image.
     imgn = np.asarray(img)
-    imgc = imgn[bb[1]:bb[3], bb[0]:bb[2]]
-#     print(imgc.shape)
-    imgcobj = Image.fromarray(imgc)
-    imgcobj2 = imgcobj.resize((224,224))
-    newimg = np.asarray(imgcobj2)
+
+    #crop
+    imgc = imgn
+    if bb!=None:
+        h, w, c = imgn.shape
+        x1 = max(0, bb[0]-margin)
+        y1 = max(0, bb[1]-margin)
+        x2 = min(bb[2]+margin, w)
+        y2 = min(bb[3]+margin, h)
+    #     imgc = imgn[bb[1]:bb[3], bb[0]:bb[2]]
+        imgc = imgn[y1:y2, x1:x2]
+    
+    newimg = imgc
+    if size!=None:
+        imgcobj = Image.fromarray(imgc)
+        imgcobj2 = imgcobj.resize(size)
+        newimg = np.asarray(imgcobj2)
     return newimg
 
 
-# In[66]:
+# In[35]:
 
 
 # preprocess test
-i=0
+i=100
 imgpath = basedir+'train/'+dftrain.loc[i]['img_file']
 bb = [dftrain.loc[i]['bbox_x1'], dftrain.loc[i]['bbox_y1'], dftrain.loc[i]['bbox_x2'], dftrain.loc[i]['bbox_y2']]
 cl = dftrain.loc[i]['class']
 img = prepro_img(imgpath, bb)
 print(img.shape)
-plt.imshow(img, cmap='gray')
+
+size=(400,400)
+plt.figure(figsize=(8*3, 8))
+plt.subplot(1,3,1)
+plt.title('resize')
+plt.imshow(prepro_img(imgpath, None, 0, size))
+
+plt.subplot(1,3,2)
+plt.title('crop')
+plt.imshow(prepro_img(imgpath, bb, 0, size))
+
+plt.subplot(1,3,3)
+plt.title('cropmargin')
+plt.imshow(prepro_img(imgpath, bb, 20, size))
+plt.show()
 
 
 # ## Make Train dataset
 
-# In[67]:
+# In[36]:
 
 
 # 훈련 데이터 만들기. 
@@ -248,7 +273,6 @@ y_train=[]
 
 if not os.path.exists('x_train.npy') or force :
     for i in range(cnt_train):
-    # for i in range(100):
         if i%1000==0 :
             print(i, '/', cnt_train)
         imgpath = 'train/'+dftrain.loc[i]['img_file']
@@ -256,10 +280,7 @@ if not os.path.exists('x_train.npy') or force :
         cl = dftrain.loc[i]['class']
         y_train.append(cl)
         test1 = prepro_img(imgpath, bb)
-    #     print(test1.shape)
         x_train.append(test1)
-    #     plt.figure()
-    #     plt.imshow(test1)
     x_train = np.array(x_train)
     y_train = np.array(y_train)
     
@@ -276,7 +297,7 @@ else:
     print('x_train.npy already exsits!')
 
 
-# In[68]:
+# In[37]:
 
 
 # 테스트 데이터도 전처리하여 저장한다.
@@ -298,7 +319,20 @@ else:
     print('x_test.npy already exsits!')
 
 
-# In[69]:
+# In[41]:
+
+
+# verify save file
+ri = np.random.randint(0, 6000, 5)
+print(ri)
+plt.figure(figsize=(len(ri)*8, 8))
+for a,i in enumerate(ri):
+    plt.subplot(1,len(ri), a+1)
+    plt.imshow(x_test[i])
+plt.show()
+
+
+# In[42]:
 
 
 # release memory 
