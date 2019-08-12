@@ -1,35 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Train car - v7
-
-# ```
-# data ; crop and resize ; add margin!
-# network ; xception 
-# 
-# ImageAugment  ; shift add. 
-# # random_eraser ; image part remove ; off
-# 
-# batch 32
-# earlystop ; f1_score 
-# checkpoint best save 
-# 
-# train acc;  , val acc;  , lb acc;   
-# model1 ;  
-# model2;  
-# model3 ; 
-# 
-# enssamble. sum.
-# 
-# 
-# ```
-# 
-
-# ## load package
-
-# In[1]:
-
-
 import sys
 import pandas as pd
 
@@ -55,34 +23,23 @@ from keras.preprocessing.image import ImageDataGenerator
 import seaborn as sns
 
 
-# In[2]:
-
-
 cache=False
 basedir = './'
 imgwidth=224
 imgheight=224
-# get_ipython().run_line_magic('matplotlib', 'inline')
+
 
 # K fold
 fold_k = 5
-# current fold
 fold_c = 5   # 1~fold_k
 
 
 for fold_c in range(1, 6):
     # ## TRAIN
-
     # In[3]:
-
-
     x_trainall = np.load('x_train.npy')
     y_trainall = np.load('y_train.npy')
     dfclass = pd.read_csv(basedir+'class.csv')
-
-
-    # In[4]:
-
 
     # cross validation
     datacnt = x_trainall.shape[0]
