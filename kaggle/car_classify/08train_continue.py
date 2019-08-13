@@ -92,19 +92,20 @@ bDEBUG = False   # debug flag.
 # xception, resnet50, mobilenetv2, efficientnetb3
 method = 'xception'
 # method = 'resnet50'
-
 modelname = 'carmodel-v8-'
-# modellist =  [(1, 'xception'), (2, 'resnet50'), (3, 'xception'), 
-#               (4, 'resnet50'), (5, 'xception'),
-#               (6, 'xception'), (7, 'resnet50'), (8, 'xception'), 
-#               (9, 'resnet50')]
-modellist =  [(3, 'efficientnetb3'), (4, 'resnet50'), 
-              (5, 'mobilenetv2'), (6, 'xception'),
-              (7, 'xception'), (8, 'xception'), 
-              (9, 'xception'), (10, 'xception'), (11, 'xception'),
-             (12, 'xception'), (13, 'xception')]
-
-for fold_c, method in modellist:
+            
+for fold_c, modelname in enumerate(['carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-']):
+    files = glob.glob('./'+modelname+'*')
+    mp = max(files, key=os.path.getctime)
+    print('model=', mp)
+        
+    method='xception'
+    if mp.find('resnet50')>0:
+        method = 'resnet50'
+    elif mp.find('mobilenetv2')>0:
+        method = 'mobilenetv2'
+    elif mp.find('efficientnetb3')>0:
+        method = 'efficientnetb3'
     
     print('start learning...')
     print(fold_c, method)
@@ -116,7 +117,7 @@ for fold_c, method in modellist:
     # cross validation
     datacnt = x_trainall.shape[0]
     flagval = np.zeros(datacnt)
-    modelpath = modelname+str(fold_c)+'-'+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'
+    modelpath = modelname+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'
 
     print('modelpath=', modelpath)
     
@@ -131,6 +132,14 @@ for fold_c, method in modellist:
     del x_trainall
     del y_trainall
     gc.collect()
+    
+    # append pseudo train
+    x_pseudo = np.load('x_pseudo.npy')
+    y_pseudo = np.load('y_pseudo.npy')
+    x_train = np.concatenate([x_train, x_pseudo])
+    y_train = np.concatenate([y_train, y_pseudo])
+    
+    print('new train(pseudo include) size=', x_train.shape, y_train.shape)
     
     # debug
     if bDEBUG:
@@ -156,7 +165,7 @@ for fold_c, method in modellist:
 
     ### checkpoint save weights in progress...
     cp_callback = ModelCheckpoint(modelpath,  monitor='val_new_score', mode='max', save_best_only=True, save_weights_only=True)
-    es_callback = EarlyStopping(monitor='val_new_score',  mode='max', patience=20, min_delta=0.0001)
+    es_callback = EarlyStopping(monitor='val_new_score',  mode='max', patience=10, min_delta=0.0001)
 
     # tensorboard log
     if not os.path.exists('log'):
@@ -184,84 +193,15 @@ for fold_c, method in modellist:
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', new_score])
 
+    # continuous learning
+    print('load_weights :', mp)
+    model.load_weights(mp)
+    
     # debug
-    epochs=200
+    epochs=50
     if bDEBUG:
         epochs = 2
     hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs, validation_data=val_generator, 
                                callbacks=[tensorboard, cp_callback, es_callback],
                                steps_per_epoch=len(x_train)/batch_size, validation_steps=len(x_val)/batch_size)
-
-
-# hist = model.evaluate_generator(val_generator, steps=len(x_val)/batch_size)
-# print(hist)
-
-# ### Submission
-# test data load for submission
-x_test = np.load('x_test.npy')
-x_test = x_test/255.
-
-# one model submission 
-if False:
-    predictions = model.predict( x_test )
-    pdi = np.argmax(predictions, axis=1)
-    print(pdi, np.min(pdi), np.max(pdi))
-
-# ensamble. submission.
-# model = load_mode('car-v7.h5')
-if False:
-    import glob, os
-    
-    predictions=[]
-    for ff, mp in enumerate(['carmodel-v8-1-', 'carmodel-v8-2-', 'carmodel-v8-4-']):
-        files = glob.glob('./'+mp+'*')
-        mp = max(files, key=os.path.getctime)
-        print('model=', mp)
-        
-        method='xception'
-        if mp.find('resnet50')>0:
-            method = 'resnet50'
-        elif mp.find('mobilenetv2')>0:
-            method = 'mobilenetv2'
-        elif mp.find('efficientnetb3')>0:
-            method = 'efficientnetb3'
-        
-        inputs = Input(shape=(224,224,3))
-        print('method=', method)
-        if method=='xception':
-            net = xception.Xception(input_tensor=inputs, input_shape=(224, 224, 3), include_top=False, weights='imagenet', pooling='max')
-        elif method=='resnet50':
-            net = resnet50.ResNet50(input_tensor=inputs, input_shape=(224, 224, 3), include_top=False, weights='imagenet', pooling='max')
-        elif method=='mobilenetv2':
-            net = mobilenetv2.MobileNetV2(input_tensor=inputs, input_shape=(224, 224, 3), include_top=False, weights='imagenet', pooling='max')
-        elif method=='efficientnetb3':
-            net = EfficientNetB3(input_tensor=inputs, input_shape=(224, 224, 3), include_top=False, weights='imagenet', pooling='max')
-        
-        net2 = Dense(224, activation='relu') (net.layers[-1].output)
-        net2 = Dense(196)(net2)
-        net2 = Softmax(196)(net2)
-        model = Model(inputs=inputs, outputs=net2)
-        
-        print('model',ff,':', mp)
-        model.load_weights(mp)
-        pr = model.predict( x_test )
-        predictions.append(pr)
-        print('prediction',ff,':',pr)
-    predictions = np.asarray(predictions)
-    prk = np.sum(predictions, axis=0 )
-    pdi = np.argmax(prk, axis=1)
-    print('final:', pdi, np.min(pdi), np.max(pdi))
-
-
-    # In[16]:
-    submission = pd.read_csv(intputdir+'sample_submission.csv')
-    submission["class"] = pdi + 1  # class [0,195] to [1,196]  
-    submission.to_csv("submission.csv", index=False)
-    submission.head()
-
-
-    # In[17]:
-    sns.countplot(submission["class"], order=submission["class"].value_counts(ascending=True).index)
-
-
 
