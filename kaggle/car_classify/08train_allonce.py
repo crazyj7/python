@@ -162,7 +162,7 @@ for fold_c, modelname in enumerate(['carmodel-v8-1-', 'carmodel-v8-6-', 'carmode
     print('load_weights :', mp)
     model.load_weights(mp)
     
-    epochs=10
+    epochs=5
     hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs,  
                                callbacks=[tensorboard, cp_callback, es_callback],
                                steps_per_epoch=len(x_trainall)/batch_size)
