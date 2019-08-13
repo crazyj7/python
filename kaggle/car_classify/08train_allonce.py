@@ -83,18 +83,11 @@ def new_score(y_true, y_pred):
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 
-# K fold
-fold_k = 5
-# fold_c = 5   # 1~fold_k
-
-bDEBUG = False   # debug flag.
-
 # xception, resnet50, mobilenetv2, efficientnetb3
 method = 'xception'
-# method = 'resnet50'
 modelname = 'carmodel-v8-'
 # 'carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-',            
-for fold_c, modelname in enumerate(['carmodel-v8-9-', 'carmodel-v8-10-']):
+for fold_c, modelname in enumerate(['carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-','carmodel-v8-9-', 'carmodel-v8-10-']):
     files = glob.glob('./'+modelname+'*')
     mp = max(files, key=os.path.getctime)
     print('model=', mp)
@@ -122,54 +115,22 @@ for fold_c, modelname in enumerate(['carmodel-v8-9-', 'carmodel-v8-10-']):
         x_trainall = np.concatenate([x_trainall, x_pseudo])
         y_trainall = np.concatenate([y_trainall, y_pseudo])
     
-
-    # cross validation
-    datacnt = x_trainall.shape[0]
-    flagval = np.zeros(datacnt)
-    modelpath = modelname+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'
-
+    modelpath = modelname+method+'-{epoch:03d}-{new_score:.4f}.ckpt'
     print('modelpath=', modelpath)
-    
-    validx=((fold_c-1)%5)*2000
-    flagval[validx:validx+2000] = 1
+    print('new train(pseudo include) size=', x_trainall.shape, y_trainall.shape)
+    print(np.min(y_trainall), np.max(y_trainall))
 
-    x_train = x_trainall[flagval==0]
-    y_train = y_trainall[flagval==0]
-    x_val = x_trainall[flagval==1]
-    y_val = y_trainall[flagval==1]
-
-    del x_trainall
-    del y_trainall
-    gc.collect()
-    
-    
-    print('new train(pseudo include) size=', x_train.shape, y_train.shape)
-    
-    # debug
-    if bDEBUG:
-        x_train = x_train[:500]
-        y_train = y_train[:500]
-        x_val=x_val[:500]
-        y_val=y_val[:500]
-    
-    print(x_train.shape, y_train.shape, x_val.shape, y_val.shape)
-    print(np.min(y_train), np.max(y_train))
-
-    y_train_onehot = np_utils.to_categorical(y_train, 196)
-    y_val_onehot = np_utils.to_categorical(y_val, 196)
-
+    y_trainall_onehot = np_utils.to_categorical(y_trainall, 196)
 
     # Image Augumentation
     datagen1 = ImageDataGenerator(rescale=1./255, shear_range=0.1, zoom_range=0.1, horizontal_flip=True, vertical_flip=False,
                                   width_shift_range=0.1, height_shift_range=0.1,
                                   fill_mode='nearest', preprocessing_function = get_random_eraser(v_l=0, v_h=1),)
-    datagen2 = ImageDataGenerator(rescale=1./255)
-    train_generator = datagen1.flow(x_train, y_train_onehot, batch_size=batch_size)
-    val_generator = datagen2.flow(x_val, y_val_onehot, batch_size=batch_size, shuffle=False)
+    train_generator = datagen1.flow(x_trainall, y_trainall_onehot, batch_size=batch_size)
 
     ### checkpoint save weights in progress...
-    cp_callback = ModelCheckpoint(modelpath,  monitor='val_new_score', mode='max', save_best_only=True, save_weights_only=True)
-    es_callback = EarlyStopping(monitor='val_new_score',  mode='max', patience=10, min_delta=0.0001)
+    cp_callback = ModelCheckpoint(modelpath,  monitor='new_score', mode='max', save_best_only=True, save_weights_only=True)
+    es_callback = EarlyStopping(monitor='new_score',  mode='max', patience=10, min_delta=0.0001)
 
     # tensorboard log
     if not os.path.exists('log'):
@@ -201,11 +162,7 @@ for fold_c, modelname in enumerate(['carmodel-v8-9-', 'carmodel-v8-10-']):
     print('load_weights :', mp)
     model.load_weights(mp)
     
-    # debug
-    epochs=50
-    if bDEBUG:
-        epochs = 2
-    hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs, validation_data=val_generator, 
+    epochs=10
+    hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs,  
                                callbacks=[tensorboard, cp_callback, es_callback],
-                               steps_per_epoch=len(x_train)/batch_size, validation_steps=len(x_val)/batch_size)
-
+                               steps_per_epoch=len(x_trainall)/batch_size)

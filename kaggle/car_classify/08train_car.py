@@ -97,11 +97,10 @@ modelname = 'carmodel-v8-'
 # modellist =  [(1, 'xception'), (2, 'resnet50'), (3, 'xception'), 
 #               (4, 'resnet50'), (5, 'xception'),
 #               (6, 'xception'), (7, 'resnet50'), (8, 'xception'), 
-#               (9, 'resnet50')]
-modellist =  [(3, 'efficientnetb3'), (4, 'resnet50'), 
-              (5, 'mobilenetv2'), (6, 'xception'),
-              (7, 'xception'), (8, 'xception'), 
-              (9, 'xception'), (10, 'xception'), (11, 'xception'),
+#               (9, 'resnet50')] (3, 'efficientnetb3'), (4, 'resnet50'), 
+#               (5, 'mobilenetv2'), (6, 'xception'),
+#               (7, 'xception'), (8, 'xception'), 
+modellist =  [ (9, 'xception'), (10, 'xception'), (11, 'xception'),
              (12, 'xception'), (13, 'xception')]
 
 for fold_c, method in modellist:
