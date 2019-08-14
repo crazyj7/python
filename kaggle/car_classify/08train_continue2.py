@@ -33,8 +33,9 @@ import gc
 
 cache=False
 
-bKaggle = True
-datadir = './data_carmodel/'
+bKaggle = False
+# datadir = './data_carmodel/'
+datadir='./'
 inputdir='./'
 if bKaggle:
     datadir = '../input/carmodel8/data_carmodel/'
@@ -115,7 +116,7 @@ method = 'xception'
 # method = 'resnet50'
 modelname = 'carmodel-v8-'
 # 'carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-', 'carmodel-v8-9-', 'carmodel-v8-10-'   
-modellist = ['carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-']
+modellist = ['carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-', 'carmodel-v8-9-']
 skf = StratifiedKFold(len(modellist))
 foldi = list(range(len(modellist)))
 for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(x_trainall, y_trainall)):
