@@ -37,8 +37,30 @@ import tensorflow as tf
 import random
 # import os
 # from keras import backend as K
+import warnings
+from keras.callbacks import Callback
+from datetime import datetime
+from pytz import timezone, utc
+KST = timezone('Asia/Seoul')
+
+class EpochLogWrite(Callback):
+    def on_epoch_begin(self, epoch, logs={}):
+        tmx = utc.localize(datetime.utcnow()).astimezone(KST).time()
+        dbgprint('Epoch #{} begins at {}'.format(epoch+1, tmx))
+    def on_epoch_end(self, epoch, logs={}):
+        tmx = utc.localize(datetime.utcnow()).astimezone(KST).time()
+        dbgprint('Epoch #{} ends at {}  acc={} val_acc={} val_new_score={}'.format(epoch+1, tmx, round(logs['acc'],4), round(logs['val_acc'],4), round(logs['val_new_score'],4) ))
+
+
+warnings.filterwarnings('ignore')
+
+def dbgprint(msg):
+	os.system(f'echo \"{msg}\"')
+	print(msg)
+
 
 SEED=1234
+dbgprint('hello world. SEED={}'.format(SEED))
 
 def seed_All():
     np.random.seed(SEED)
@@ -51,19 +73,27 @@ def seed_All():
 
 seed_All()
 #######################
-
+# configure
 bDebug=False
-bKaggle = False
+bKaggle = True
+curFold = 2  # make current fold (1..fold_k)
+
+batch_size=32  # 16, 32, 64  debug.. memory dependent!
+
+# K fold
+fold_k = 6
+
 # datadir = './data_carmodel/'
-datadir='./pre/'
-inputdir='./'
+inputdir='./'   # csv file
+datadir='./pre/'   # preprocessing image
+outputdir='./pre/'   # make model to
 if bKaggle:
-    datadir = '../input/carmodel5/data_carmodel/'
+    datadir = '../input/carmodel5/ppcarmodel/'
     inputdir = '../input/2019-3rd-ml-month-with-kakr/'
+    outputdir='./'
 
 # imagesize=299
 imagesize=250
-batch_size=32  # 16, 32, 64  debug
 
 #ref: https://github.com/yu4u/cutout-random-erasing/blob/master/cifar10_resnet.py
 def get_random_eraser(p=0.5, s_l=0.02, s_h=0.4, r_1=0.3, r_2=1/0.3, v_l=0, v_h=255, pixel_level=False):
@@ -108,8 +138,6 @@ def new_score(y_true, y_pred):
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 
-# K fold
-fold_k = 6
 
 dftrain = pd.read_csv(inputdir+'train.csv')
 if bDebug:
@@ -136,14 +164,25 @@ method = 'xception'
 modelname = 'carmodel-v5-'
 # 'carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-', 'carmodel-v8-9-', 'carmodel-v8-10-'   
 # , 'carmodel-v9-2-', 'carmodel-v9-3-', 'carmodel-v9-4-', 'carmodel-v9-5-'
-modellist = ['carmodel-v5-1-']
+modellist = ['carmodel-v5-1-', 'carmodel-v5-2-', 'carmodel-v5-3-', 'carmodel-v5-4-', 'carmodel-v5-5-', 'carmodel-v5-6-']
 
 skf = StratifiedKFold(fold_k, random_state=SEED)
 foldi = list(range(len(modellist)))
 
 print(dftrain.head())
 
+kk=0
 for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['img_file'], dftrain['class'])):
+    kk+=1
+    # 아래를 주석처리하면 전체 모델 생성으로 오랜 시간 소요.
+    # curFold (1~6) 해당 모델 1개만 생성.
+    if kk < curFold:
+        continue
+    if kk > curFold:
+        break
+        
+    dbgprint('Make Model={}'.format(kk))
+    
     print(tri, tei)
     print('train size=', len(tri), 'val size=', len(tei))
     files = glob.glob(datadir+modelname+'*')
@@ -164,7 +203,7 @@ for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['im
     
     print('start learning...')
     print(fold_c, method)
-    modelpath = datadir+modelname+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'    
+    modelpath = outputdir+modelname+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'    
     
     dftrain_t = dftrain.iloc[tri,:].reset_index()
     dftrain_v = dftrain.iloc[tei,:].reset_index()
@@ -201,7 +240,8 @@ for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['im
 
     ### checkpoint save weights in progress...
     cp_callback = ModelCheckpoint(modelpath,  monitor='val_new_score', mode='max', save_best_only=True, save_weights_only=True)
-    es_callback = EarlyStopping(monitor='val_new_score',  mode='max', patience=20, min_delta=0.0001)
+    es_callback = EarlyStopping(monitor='val_new_score',  mode='max', patience=20)
+    # , min_delta=0.0001
 
     # tensorboard log
     if not os.path.exists('log'):
@@ -241,6 +281,6 @@ for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['im
 # callbacks=[tensorboard, cp_callback, es_callback],
     epochs=200
     hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs, validation_data=val_generator, 
-                               callbacks=[tensorboard, cp_callback],
+                               callbacks=[tensorboard, cp_callback, es_callback, EpochLogWrite()],
                                steps_per_epoch=len(tri)/batch_size, validation_steps=len(tei)/batch_size)
 
