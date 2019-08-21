@@ -276,7 +276,7 @@ for modelname, (tri, tei) in zip(modellist, skf.split(dftrain['img_file'], dftra
     else:
         print('new start model.')
     
-    cblist = [tensorboard, cp_callback, es_callback, EpochLogWrite()],
+    cblist = [tensorboard, cp_callback, es_callback, EpochLogWrite()]
     epochs=200
     hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs, validation_data=val_generator, 
                                callbacks=cblist,
