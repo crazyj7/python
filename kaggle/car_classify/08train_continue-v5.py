@@ -41,7 +41,14 @@ import warnings
 from keras.callbacks import Callback
 from datetime import datetime
 from pytz import timezone, utc
+
+warnings.filterwarnings('ignore')
+
 KST = timezone('Asia/Seoul')
+
+def dbgprint(msg):
+	os.system(f'echo \"{msg}\"')
+# 	print(msg)
 
 class EpochLogWrite(Callback):
     def on_epoch_begin(self, epoch, logs={}):
@@ -50,13 +57,6 @@ class EpochLogWrite(Callback):
     def on_epoch_end(self, epoch, logs={}):
         tmx = utc.localize(datetime.utcnow()).astimezone(KST).time()
         dbgprint('Epoch #{} ends at {}  acc={} val_acc={} val_new_score={}'.format(epoch+1, tmx, round(logs['acc'],4), round(logs['val_acc'],4), round(logs['val_new_score'],4) ))
-
-
-warnings.filterwarnings('ignore')
-
-def dbgprint(msg):
-	os.system(f'echo \"{msg}\"')
-	print(msg)
 
 
 SEED=1234
@@ -72,6 +72,7 @@ def seed_All():
     K.set_session(sess)
 
 seed_All()
+
 #######################
 # configure
 bDebug=False
@@ -147,7 +148,6 @@ if bDebug:
 dftrain['class'] = dftrain['class'].astype('str')
 dfclass = pd.read_csv(inputdir+'class.csv')
 classes = list (str(num) for num in range(1,197))
-print(classes)
 
 # append pseudo train
 if False:
@@ -156,15 +156,16 @@ if False:
     y_pseudo = np.load(datadir+'y_pseudo3.npy')
     x_trainall = np.concatenate([x_trainall, x_pseudo])
     y_trainall = np.concatenate([y_trainall, y_pseudo])
-        
 
+    
 # xception, resnet50, mobilenetv2, efficientnetb3
 method = 'xception'
 # method = 'resnet50'
 modelname = 'carmodel-v5-'
 # 'carmodel-v8-1-', 'carmodel-v8-6-', 'carmodel-v8-7-', 'carmodel-v8-8-', 'carmodel-v8-9-', 'carmodel-v8-10-'   
 # , 'carmodel-v9-2-', 'carmodel-v9-3-', 'carmodel-v9-4-', 'carmodel-v9-5-'
-modellist = ['carmodel-v5-1-', 'carmodel-v5-2-', 'carmodel-v5-3-', 'carmodel-v5-4-', 'carmodel-v5-5-', 'carmodel-v5-6-']
+modellist = ['carmodel-v5-1-', 'carmodel-v5-2-', 'carmodel-v5-3-', 
+             'carmodel-v5-4-', 'carmodel-v5-5-', 'carmodel-v5-6-']
 
 skf = StratifiedKFold(fold_k, random_state=SEED)
 print(dftrain.head())
@@ -275,10 +276,9 @@ for modelname, (tri, tei) in zip(modellist, skf.split(dftrain['img_file'], dftra
     else:
         print('new start model.')
     
-    # debug
-# callbacks=[tensorboard, cp_callback, es_callback],
+    cblist = [tensorboard, cp_callback, es_callback, EpochLogWrite()],
     epochs=200
     hist = model.fit_generator( train_generator, initial_epoch=0, epochs = epochs, validation_data=val_generator, 
-                               callbacks=[tensorboard, cp_callback, es_callback, EpochLogWrite()],
+                               callbacks=cblist,
                                steps_per_epoch=len(tri)/batch_size, validation_steps=len(tei)/batch_size)
 
