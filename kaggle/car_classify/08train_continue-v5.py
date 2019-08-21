@@ -76,7 +76,7 @@ seed_All()
 # configure
 bDebug=False
 bKaggle = True
-curFold = 2  # make current fold (1..fold_k)
+curFold = 6  # make current fold (1..fold_k)
 
 batch_size=32  # 16, 32, 64  debug.. memory dependent!
 
@@ -167,12 +167,10 @@ modelname = 'carmodel-v5-'
 modellist = ['carmodel-v5-1-', 'carmodel-v5-2-', 'carmodel-v5-3-', 'carmodel-v5-4-', 'carmodel-v5-5-', 'carmodel-v5-6-']
 
 skf = StratifiedKFold(fold_k, random_state=SEED)
-foldi = list(range(len(modellist)))
-
 print(dftrain.head())
 
 kk=0
-for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['img_file'], dftrain['class'])):
+for modelname, (tri, tei) in zip(modellist, skf.split(dftrain['img_file'], dftrain['class'])):
     kk+=1
     # 아래를 주석처리하면 전체 모델 생성으로 오랜 시간 소요.
     # curFold (1~6) 해당 모델 1개만 생성.
@@ -202,7 +200,7 @@ for fold_c, modelname, (tri, tei) in zip(foldi, modellist, skf.split(dftrain['im
         method = 'efficientnetb3'
     
     print('start learning...')
-    print(fold_c, method)
+    print(kk, method)
     modelpath = outputdir+modelname+method+'-{epoch:03d}-{val_new_score:.4f}.ckpt'    
     
     dftrain_t = dftrain.iloc[tri,:].reset_index()
