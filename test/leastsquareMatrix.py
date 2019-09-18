@@ -9,7 +9,7 @@ b=np.array([[0],[7],[3],[10]])
 
 x = np.dot( np.dot( np.linalg.inv( np.dot(np.transpose(A), A)), np.transpose(A) ) , b)
 
-print('A=',A)
+print('A=',A)27
 print('b=',b)
 print('x=',x)
 
