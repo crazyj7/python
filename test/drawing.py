@@ -1,6 +1,7 @@
 import tkinter
 from PIL import Image, ImageDraw
 import numpy as np
+from time import time
 
 import matplotlib.pyplot as plt
 import scipy.interpolate as ip
@@ -9,21 +10,57 @@ from scipy.interpolate import splrep, splev, splprep
 
 class PaintBrush:
 
+    @staticmethod
+    def nparrs_to_str(nparrs):
+        retstr=""
+        for nparr in nparrs:
+            retstr+="["
+            for it in nparr:
+                retstr+="("
+                retstr+= "{},{},{}".format(it[0], it[1], it[2])
+                retstr+=")"
+            retstr+="]"
+        return retstr
+
+    @staticmethod
+    def str_to_nparrs(strp):
+        strp = strp.replace("[", "")
+        segs = strp.split("]")
+        lsDraw=[]
+        for se in segs:
+            se = se.replace("(", "")
+            spts = se.split(")")
+            lsPts=[]
+            for pts in spts:
+                it = pts.split(",")
+                if len(it)>=3:
+                    lsPts.append([it[0], it[1], it[2]])
+            arPts = np.asarray(lsPts)
+            if len(arPts)>0:
+                lsDraw.append(arPts)
+        return lsDraw
+
     def __init__(self, title, width=400, height=200):
-        self.line_col = 0
+        self.line_col = 0   # line color
         self.line_width = 5
 
         self.root = None
         self.frame = None
+
+        # 화면 크기
         self.width = 400
         self.height = 200
+
         self.canvas = None
         self.cancel = False
 
         self.imagedraw = None
+        self.start_flag = False  # timer start.
+        self.start_time = 0
 
         # members
         self.image1 = None  # org image (400x200)
+
         # only content area lefttop(rx0,ry0), rightbottom(rx1,ry1)
         self.rx0 = 9999999
         self.rx1 = 0
@@ -31,9 +68,9 @@ class PaintBrush:
         self.ry1 = 0
         self.contentcx = 0  # content area (line width include)
         self.contextcy = 0  # content area (line width include)
+
         self.pb_sample_signs = []  # sample pts list (multi line)
         self.pb_sample_pts = []  # sample points list (one line)
-
 
         self.root = tkinter.Tk()
         self.root.title(title)
@@ -63,12 +100,17 @@ class PaintBrush:
         self.canvas.create_line(self.x0, self.y0, event.x, event.y, width=self.line_width)
         self.imagedraw.line((self.x0, self.y0, event.x, event.y), fill=self.line_col, width=self.line_width)
         self.x0,self.y0 = event.x, event.y
-        self.pb_sample_pts.append([self.x0,self.y0])
+
+        dt = int( (time()-self.start_time)*1000 )
+        self.pb_sample_pts.append([self.x0,self.y0, dt])
 
     def down(self, event):
         # global x0, y0
         # global rx0, rx1, ry0, ry1
         # global pb_sample_signs, pb_sample_pts
+        if self.start_flag==False:
+            self.start_flag=True
+            self.start_time=time()
 
         self.x0,self.y0 = event.x, event.y
         self.rx0 = min([self.rx0, event.x])
@@ -76,7 +118,9 @@ class PaintBrush:
         self.ry0 = min([self.ry0, event.y])
         self.ry1 = max([self.ry1, event.y])
         self.pb_sample_pts=[]
-        self.pb_sample_pts.append([self.x0,self.y0])
+
+        dt = int( (time()-self.start_time)*1000 )
+        self.pb_sample_pts.append([self.x0,self.y0, dt])
 
     def up(self, event):
         # global x0, y0
@@ -84,11 +128,12 @@ class PaintBrush:
         if ( self.x0,self.y0 ) == (event.x, event.y):
             self.canvas.create_line(self.x0, self.y0, self.x0 + 1, self.y0 + 1, width=self.line_width)
             self.imagedraw.line((self.x0, self.y0, self.x0+1, self.y0+1), fill=self.line_col, width=self.line_width)
-            self.pb_sample_pts.append([self.x0+1,self.y0+1])
+            dt = int((time() - self.start_time) * 1000)
+            self.pb_sample_pts.append([self.x0+1,self.y0+1, dt])
 
             self.canvas.create_line(self.x0+1, self.y0+1, self.x0 + 2, self.y0 + 2, width=self.line_width)
             self.imagedraw.line((self.x0+1, self.y0+1, self.x0+2, self.y0+2), fill=self.line_col, width=self.line_width)
-            self.pb_sample_pts.append([self.x0+2,self.y0+2])
+            self.pb_sample_pts.append([self.x0+2,self.y0+2, dt+10])
 
             self.pb_sample_signs.append(self.pb_sample_pts)
             self.pb_sample_pts = []
@@ -129,6 +174,9 @@ class PaintBrush:
             # img.show()  # default os program!
             # imgnp = np.asarray(img)
             # plt.imshow(imgnp)   # plot draw! (more fast)
+
+            drawstr = PaintBrush.nparrs_to_str(self.pb_sample_signs)
+            print(drawstr)
 
             self.root.destroy()
 
@@ -261,12 +309,24 @@ def drawtoimage(splinesign, a0,a1,a2,a3, figcx, figcy):
     return pil_image
 
 
+stp = "[(105,99,0)(105,98,27)(105,97,58)(109,97,66)(113,97,74)(119,97,82)(125,97,90)(131,97,98)(135,97,106)(141,97,114)(147,97,122)(150,97,130)(154,97,138)(157,97,146)(161,97,154)(164,97,162)(169,97,169)(175,97,177)(181,97,185)(186,97,194)(190,97,202)(193,97,210)(195,97,218)(196,97,225)(197,97,234)(199,97,242)(202,97,249)(204,97,258)(205,97,266)(207,97,274)(210,97,282)(216,97,289)(218,97,298)(226,97,305)(232,97,314)(236,97,321)(242,97,330)(245,97,338)(251,97,346)(253,97,354)(255,97,362)(258,97,370)(260,97,377)(263,97,386)(265,97,393)(266,97,402)(267,97,409)(269,97,417)(270,97,434)(272,97,441)(273,97,458)(274,98,578)(275,99,578)(276,100,588)]"
+lsDraw = PaintBrush.str_to_nparrs(stp)
+print(lsDraw)
+
+plt.figure()
+plt.xlim([0, 400])
+plt.ylim([0, 200])
+print(len(lsDraw))
+for seg in lsDraw:
+    print(seg[:,0])
+    print(seg[:,1])
+    plt.plot(seg[:,0], seg[:,1])
+plt.show()
 
 if __name__=='__main__':
     print('**paintbrush test..')
     pb=PaintBrush('Draw and enter or esc')
     image1= pb.InputDraw()
-
     image1.save('drawingimage.png')   # org size. (400, 200)
     npimage = np.asarray(image1)    # translate to numpy array!
     print('npimage=', npimage.shape)
