@@ -29,7 +29,7 @@ def ani_indextosegnum(vdraw, i):
         segindex+=1
     return (segindex, i-totalcnt)
 
-def ani_draw_animate(i, col, vrdraw, endclose):
+def ani_draw_animate(i, col, vrdraw, endclose, delay):
    vdraw = vrdraw.params['draw']
    # print('i=',i)
    segindex, newi = ani_indextosegnum(vdraw, i)
@@ -45,16 +45,21 @@ def ani_draw_animate(i, col, vrdraw, endclose):
       return
    # print('segindex=',segindex, 'newi=',newi)
    seg=vdraw[segindex]
-   if len(seg) <= newi+1:
-      ani.event_source.interval = 10
-   else:
-      ani.event_source.interval = seg[newi+1, 2]- seg[newi, 2]
+
+   if delay==0 :
+       if len(seg) <= newi+1:
+          ani.event_source.interval = 10
+       else:
+          ani.event_source.interval = seg[newi+1, 2]- seg[newi, 2]
 
     # 처음부터 진행된 것 까지 다시 그림
    # return ax1.plot( seg[0:newi, 0], seg[0:newi, 1], c=col, lw=3)
    return ax1.plot( seg[newi-2:newi, 0], seg[newi-2:newi, 1], c=col, lw=3)
 
-def ani_draw(vrdraw, yreverse=True, endclose=False):
+# yreverse : y-axis 뒤집기. (vrdraw의 좌표계는 모니터 화면 좌표계, plot은 수학 좌표계)
+# endclose : 재생 완료시 화면 자동 닫기 여부
+# delay : drawing 지연 시간. (0이면 user mode replay. 대략 10~100 적을수록 빠름.)
+def ani_draw(vrdraw, yreverse=True, endclose=False, delay=0):
     global ax1, ani
    # vrdraw = Secudraw()
    # vrdraw.parse_drawdata(rdraw)
@@ -72,9 +77,14 @@ def ani_draw(vrdraw, yreverse=True, endclose=False):
         plt.gca().invert_yaxis()
 
     myline, = ax1.plot([],[], '-', c='k', lw=3)
+    if delay==0:
+        interval=10
+    else:
+        interval = delay
+
     ani=animation.FuncAnimation(fig, ani_draw_animate, 
-                                frames=vrdraw.params['ptcnt']+1 ,fargs=('k', vrdraw, endclose, ),
-                            interval=10, repeat=False,  blit=False)
+                                frames=vrdraw.params['ptcnt']+1 ,fargs=('k', vrdraw, endclose, delay, ),
+                            interval=interval, repeat=False,  blit=False)
     plt.show()
 
 
@@ -116,9 +126,10 @@ class DrawObj:
         self.params['rmax'] = [ rmax2[0], rmax2[1] ]
         self.params['draw'] = lsDraw
 
-do = DrawObj()
-do.load(stp)
-print(do.params)
+picture1 = DrawObj()
+picture1.load(stp)
+print(picture1.params)
 
-ani_draw(do, True, False)
+# default
+ani_draw(picture1, True, False, 0)
 
