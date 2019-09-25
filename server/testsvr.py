@@ -55,7 +55,6 @@ class sum(MethodView):
     def post(self):
         '''
         JSON으로 받아서 작업 후 JSON으로 결과 반환
-        :return:
         '''
         logging.info('sum test')
         # print('request.data=', request.data)  # binary data read all
