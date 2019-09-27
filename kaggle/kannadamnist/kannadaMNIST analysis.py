@@ -77,8 +77,8 @@ from pytz import timezone, utc
 ## load data
 inputdir='../input/Kannada-MNIST/'
 outputdir='./'
-# datadir='../input/mykannada/'
-datadir='/kaggle/input/mykannada/'
+datadir='../input/mykannada2/'
+# datadir='/kaggle/input/mykannada/'
 
 
 dftrain = pd.read_csv(inputdir+'train.csv')
@@ -139,15 +139,15 @@ def image_show(npdata, labels, cnt, brandom=True):
 
 # train 이미지 랜덤 보기
 if False:
-    image_show(nptrain, dftrain.label, 6)
+    image_show(nptrain, dftrain.label, 6, True)
 
 
 # In[ ]:
 
 
-# test 이미지 랜덤 보기
+# test 이미지 보기.
 if False:
-    image_show(nptest, dftest.id, 6)
+    image_show(nptest, dftest.id, 6, False)
 
 
 # In[ ]:
@@ -170,17 +170,36 @@ datagen2 = ImageDataGenerator(rescale=1./255)
 
 if False:
     datagen1.fit(nptrain)
-    for xbatch, ybatch in datagen1.flow(nptrain, dftrain['label'], batch_size=6):
+    for xbatch, ybatch in datagen1.flow(nptrain, dftrain['label'], batch_size=6, shuffle=True):
         image_show(xbatch, ybatch, 6, False)
         break
 
 
 # In[ ]:
-
 if False:
-    for xbatch, ybatch in datagen1.flow(nptrain, dftrain['label'], batch_size=6):
+    for xbatch, ybatch in datagen2.flow(nptrain, dftrain['label'], batch_size=6, shuffle=False):
         image_show(xbatch, ybatch, 6, False)
         break
+
+
+
+datagen3 = ImageDataGenerator(rescale=1./255, shear_range=0.1, zoom_range=0.1,
+                              horizontal_flip=False, vertical_flip=False,
+                              width_shift_range=0.1, height_shift_range=0.1,
+                              rotation_range=15, brightness_range=[0.5, 1.2],
+                              fill_mode='nearest')
+samplex = nptrain[0:5]
+sampley = dftrain['label'][0:5]
+print('sampley=', sampley)
+if False:
+    i=0
+    for xbatch, ybatch in datagen3.flow(samplex, sampley, batch_size=5, shuffle=False):
+        print(xbatch.shape, ybatch.shape)
+        i+=1
+        image_show(xbatch, ybatch, xbatch.shape[0], False)
+        if i==3:
+            break
+
 
 
 # ## Train
@@ -234,7 +253,10 @@ RUNMODE_TRAIN_ONE=0
 RUNMODE_TRAIN_ALL=1
 RUNMODE_TEST_ONE=2
 RUNMODE_TEST_ALL=3
-runmode = RUNMODE_TRAIN_ALL
+RUNMODE_TEST_ALL_TTA=4
+
+runmode = RUNMODE_TEST_ALL_TTA
+
 
 epochs = 70
 
@@ -373,16 +395,14 @@ if runmode==RUNMODE_TRAIN_ONE or runmode==RUNMODE_TRAIN_ALL:
                                    callbacks=cblist, steps_per_epoch=len(tri)/batch_size, validation_steps=len(tei)/batch_size)
 
         # model.save(outputdir+'model.h5')   # create last train model file in CWD
-elif runmode==RUNMODE_TEST_ONE:
-    # test
-    print('test : load model')
-    model = load_model(modelpath) # load model from modelpath (dataset)
-    # model.summary()
 
 
 # In[ ]:
 
 if runmode==RUNMODE_TEST_ONE:
+    print('RUNMODE_TEST_ONE')
+    model = load_model(modelpath) # load model from modelpath (dataset)
+    # model.summary()
     # test mode
     datagen1 = ImageDataGenerator(rescale=1./255)
     dflabel = np_utils.to_categorical(dftrain['label'])
@@ -398,6 +418,7 @@ if runmode==RUNMODE_TEST_ONE:
     result = model.predict_generator(eval_generator, steps=dflabel.shape[0]/batch_size)
     
     predict_result = np.argmax(result, axis=1)
+
     print(predict_result)
     print(dftrain['label'].values)
     print('match cnt=', np.sum(predict_result==dftrain['label'].values))    
@@ -421,7 +442,7 @@ if runmode==RUNMODE_TEST_ONE:
 
 
 if runmode==RUNMODE_TEST_ALL:
-    print("ensemble model.")
+    print("RUNMODE_TEST_ALL")
     datagen1 = ImageDataGenerator(rescale=1. / 255)
     test_generator = datagen1.flow(nptest, batch_size=batch_size, shuffle=False)
 
@@ -449,4 +470,49 @@ if runmode==RUNMODE_TEST_ALL:
 
     dfsub['label'] = predict_result
     dfsub.to_csv('submit.csv', index=False)
+elif runmode==RUNMODE_TEST_ALL_TTA:
+    print("RUNMODE_TEST_ALL_TTA")
+    batch_size = 10
+    ttagen = ImageDataGenerator(rescale=1. / 255, shear_range=0.1, zoom_range=0.1,
+                                horizontal_flip=False, vertical_flip=False,
+                                width_shift_range=0.1, height_shift_range=0.1,
+                                rotation_range=15, brightness_range=[0.5, 1.2],
+                                fill_mode='nearest')
+    tta_generator = ttagen.flow(nptest, batch_size=batch_size, shuffle=False)
+
+    files = glob.glob(datadir + modelname + '*')
+    resultlist = []
+    for modelpath in files:
+        print('modelpath=', modelpath)
+        model = load_model(modelpath)
+
+        tta_generator.reset()
+        result = model.predict_generator(tta_generator, steps=len(nptest) / batch_size)
+        resultlist.append(result)
+
+        tta_generator.reset()
+        result = model.predict_generator(tta_generator, steps=len(nptest) / batch_size)
+        resultlist.append(result)
+
+        tta_generator.reset()
+        result = model.predict_generator(tta_generator, steps=len(nptest) / batch_size)
+        resultlist.append(result)
+
+
+    resultlist = np.asarray(resultlist)
+    dbgprint(resultlist)
+    dbgprint(resultlist.shape)
+
+    prk = np.mean(resultlist, axis=0)
+    dbgprint(prk)
+    dbgprint(prk.shape)
+
+    predict_result = np.argmax(prk, axis=1)
+    dbgprint(predict_result)
+
+    dfsub['label'] = predict_result
+    dfsub.to_csv('submit.csv', index=False)
+
+
+
 
