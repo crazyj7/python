@@ -623,8 +623,10 @@ plt.close()
 
 pltconfig_check()
 
+# ## 형상 관리 테스트
 
+# - jupytext를 이용하여 py script로 형상관리를 하고 ipynb로 자동변환 테스트
 
-
+np.random.randn(10)
 
 
