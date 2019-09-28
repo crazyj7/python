@@ -98,7 +98,7 @@ seed_All()
 ## load data
 inputdir='../input/Kannada-MNIST/'
 outputdir='./'
-datadir='../input/mykannada2/'
+datadir='../input/mykannada3/'
 # datadir='/kaggle/input/mykannada/'
 
 
@@ -109,6 +109,8 @@ dfsub = pd.read_csv(inputdir+'sample_submission.csv')
 # -
 
 dftrain = dftrain.append(dfadd, ignore_index=True)
+
+dftrain = dftrain.sample(frac=1).reset_index(drop=True)
 
 dftrain.label.value_counts()
 
@@ -144,7 +146,7 @@ def image_show(npdata, labels, cnt, brandom=True):
 
 
 # train 이미지 랜덤 보기
-if True:
+if False:
     image_show(nptrain, dftrain.label.values, 6, True)
 
 
@@ -212,7 +214,7 @@ RUNMODE_TEST_ONE=2
 RUNMODE_TEST_ALL=3
 RUNMODE_TEST_ALL_TTA=4
 
-runmode = RUNMODE_TRAIN_ALL
+runmode = RUNMODE_TEST_ALL
 
 
 epochs = 70
@@ -220,7 +222,7 @@ epochs = 70
 # +
 # !!! curFold 1~6 make 6 models...
 # + {}
-curFold = 1  # make current fold (1..fold_k)
+curFold = 4  # make current fold (1..fold_k)
 
 # batch_size=32  # 16, 32, 64  debug.. memory dependent!
 batch_size=64
@@ -392,8 +394,8 @@ if runmode==RUNMODE_TEST_ONE:
     dfsub.to_csv('submit.csv', index=False)
 
 # # +
+# -
 
-# +
 if runmode==RUNMODE_TEST_ALL:
     print("RUNMODE_TEST_ALL")
     datagen1 = ImageDataGenerator(rescale=1. / 255)
