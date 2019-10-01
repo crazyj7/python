@@ -10,7 +10,7 @@ pip install --user --upgrade twine
 
 ## upload
 python setup.py sdist bdist_wheel
-# test
+# test : https://test.pypi.org/project/mypackcrazyj/
 python -m twine upload -u crazyj --repository-url https://test.pypi.org/legacy/ dist/* --verbose
 
 ## install
@@ -18,24 +18,39 @@ pip install --upgrade --index-url https://test.pypi.org/simple/ --no-deps mypack
 pip uninstall mpackcrazyj
 
 ## RELEASE
-# release
+# release : https://pypi.org/project/mypackcrazyj
 python -m twine upload -u crazyj dist/* --verbose
 pip install mypackcrazyj
  
 
 '''
+import setuptools
 
-setup(name='mypackcrazyj',
-      version='0.1.1',
+with open("README.md", "r") as f:
+      long_description = f.read()
+
+setup(
+      name='mypackcrazyj',
+      version='0.1.4',
       description='package testing',
-      url='http://github.com/crazyj7/python/mypackcrazyj',
+      long_description=long_description,
+      long_description_content_type='text/markdown',
+      url='https://github.com/crazyj7/python/tree/master/mypackcrazyj',
+
       author='crazyj',
       author_email='crazyj7@gmail.com',
       license='MIT',
-      packages=['mypackcrazyj'],
+
+      packages=setuptools.find_packages(),
       install_requires=['markdown',],
       zip_safe=False,
-      python_requires='>=3.6')
+      classifiers=[
+            "Programming Language :: Python :: 3",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+      ],
+      python_requires = '>=3.6',
+)
 
 
 '''
