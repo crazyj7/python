@@ -1,1 +1,3 @@
-hello
+hello EUC-KR 포맷입니다. (ANSI)
+
+

@@ -87,6 +87,9 @@ df_train = pd.read_csv(inputdir+'train.csv')
 df_test = pd.read_csv(inputdir+'test.csv')
 
 # ## 데이터 탐색
+#
+# head(n), describe(), info(), columns, index  
+# value_counts()
 
 ## data explore
 # 데이터의 일부를 관찰. (파라미터가 없으면 디폴트로 5개)
@@ -123,13 +126,23 @@ print('quantile = ', df_train.Fare.quantile(0), df_train.Fare.quantile(0.25), df
 
 # ---
 # ## 데이터 수정/병합
+# df3 = pd.concat([df1 , df2], axis=0)  
+# df3 = df1.append(df2, ignore_index=True)  
+# df4.drop(columns='age', inplace=True)  
+
+df_train.head()
+df_train.shape
+
+df_test.head()
+df_test.shape
 
 # +
 # train, test 데이터가 survived를 제외하고 동일함. 합쳐서 전처리 작업을 할 수 도 있다.
 # drop은 columns or rows를 삭제할 수 있다. (array로 여러개 지정 가능)
-# concat은 병합. axis로 방향.
+# concat은 병합. axis로 방향. 다른 방법으로는 df_train.append(df_test)을 리턴으로 받으면 된다.
 # iloc는 array index로 filtering
 # inplace는 자체 수정 여부. (False이면 자체수정없이 수정된것을 반환.)
+# ignore_index=True 옵션을 주면, 인덱스를 0부터 새로 매긴다. False이면 인덱스 값이 중복되더라도 유지한다.
 
 # df_all = pd.concat([df_train.iloc[:,2:], df_test.iloc[:,1:]], axis=0)
 # or
