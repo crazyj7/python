@@ -29,6 +29,8 @@ log = logging.basicConfig(filename='testsvr.log', level=logging.INFO)
 '''
 class apitest1(MethodView):
     def get(self):
+        print('header:', request.headers)
+        # print(request.headers['pwd'])
         data = request.args
         print('recv:', data)  # dictionary
         abc = data.get('abc')
@@ -39,9 +41,19 @@ class apitest1(MethodView):
         return result
 
     def post(self):
+        print('header:', request.headers)
         # get과 동일하게 작동
-        return self.get()
+        # return self.get()
 
+        # curl http://localhost:18899/apitest1 -d "name=jane"
+        # receive form data
+        # result = request.form["name"]
+        result = request.form.get('name')
+        if not result :
+            result = 'name required(FORM)'
+        else:
+            print("name=", result)
+        return result
 
 '''
 /sum
@@ -55,7 +67,9 @@ class sum(MethodView):
     def post(self):
         '''
         JSON으로 받아서 작업 후 JSON으로 결과 반환
+curl -H "Content-Type: application/json" http://localhost:18899/sum -d "{\"a\":10,\"b\":20}"
         '''
+        print('header:', request.headers)
         logging.info('sum test')
         # print('request.data=', request.data)  # binary data read all
         data=request.get_json(force=True) # parse json string
